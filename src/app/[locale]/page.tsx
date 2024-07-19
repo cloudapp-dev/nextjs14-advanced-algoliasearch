@@ -34,7 +34,6 @@ interface SearchParamsProps {
 
 interface PageProps {
   params: PageParams;
-  searchParams?: SearchParamsProps;
 }
 
 const generateUrl = (locale: string, slug: string) => {
@@ -109,7 +108,7 @@ export async function generateMetadata(
   };
 }
 
-async function Home({ params, searchParams }: PageProps) {
+async function Home({ params }: PageProps) {
   const { isEnabled } = draftMode();
   //declare JSON-LD schema
   let jsonLd: WithContext<Article> = {} as WithContext<Article>;
@@ -120,10 +119,6 @@ async function Home({ params, searchParams }: PageProps) {
       preview: isEnabled,
     }),
   ]);
-
-  const NUMBER_TO_FETCH = 10;
-
-  const currentPage = Number(searchParams?.page) || 1;
 
   const page = landingPageData.pageLandingCollection?.items[0];
 
@@ -166,13 +161,11 @@ async function Home({ params, searchParams }: PageProps) {
     }
   }
 
-  const newOffset = Number(currentPage - 1) * NUMBER_TO_FETCH;
-
   // Getting BlogPosts
   const blogPostsData = await client.pageBlogPostCollection({
     limit: 10,
     locale: params.locale.toString(),
-    skip: newOffset,
+    skip: 0,
     preview: isEnabled,
     order: PageBlogPostOrder.PublishedDateDesc,
     where: {
