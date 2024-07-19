@@ -5,7 +5,7 @@ import {
 } from "@contentful/rich-text-react-renderer";
 import { BLOCKS, MARKS, Document, INLINES } from "@contentful/rich-text-types";
 import { ArticleImage } from "@/components/contentful/ArticleImage.component";
-import { ComponentRichImage } from "@/lib/__generated/sdk";
+import { ComponentRichImage, NavItem } from "@/lib/__generated/sdk";
 import { CopyButton } from "@/components/contentful/ArticleCodeCopy";
 import { Toc } from "@/components/contentful/ArticleToc";
 import { ArticleTocItem } from "@/components/contentful/ArticleTocItem";
@@ -15,7 +15,7 @@ import Link from "next/link";
 
 import SyntaxHighlightPost from "@/components/tools/syntaxhighlight/syntaxhighlightPost.component";
 
-export type EmbeddedEntryType = ComponentRichImage | null;
+export type EmbeddedEntryType = ComponentRichImage | NavItem | null;
 
 export interface ContentfulRichTextInterface {
   json: Document;
@@ -37,6 +37,15 @@ export const EmbeddedEntry = (entry: EmbeddedEntryType) => {
   switch (entry?.__typename) {
     case "ComponentRichImage":
       return <ArticleImage image={entry} />;
+    case "NavItem":
+      return (
+        <Link
+          href={entry?.href || ""}
+          className="px-6 py-3 text-white no-underline transition duration-300 bg-blue-700 rounded-lg shadow-lg dark:hover:bg-blue-700 dark:bg-blue-600 hover:bg-blue-800"
+        >
+          {entry?.name}
+        </Link>
+      );
     default:
       return null;
   }

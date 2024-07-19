@@ -252,8 +252,9 @@ export enum AssetOrder {
 }
 
 /** To have author-related properties [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/componentAuthor) */
-export type ComponentAuthor = Entry & {
+export type ComponentAuthor = Entry & _Node & {
   __typename?: 'ComponentAuthor';
+  _id: Scalars['ID']['output'];
   avatar?: Maybe<Asset>;
   contentfulMetadata: ContentfulMetadata;
   internalName?: Maybe<Scalars['String']['output']>;
@@ -375,8 +376,9 @@ export enum ComponentAuthorOrder {
 }
 
 /** To describe an image used in rich text fields [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/componentRichImage) */
-export type ComponentRichImage = Entry & {
+export type ComponentRichImage = Entry & _Node & {
   __typename?: 'ComponentRichImage';
+  _id: Scalars['ID']['output'];
   caption?: Maybe<Scalars['String']['output']>;
   contentfulMetadata: ContentfulMetadata;
   fullWidth?: Maybe<Scalars['Boolean']['output']>;
@@ -481,8 +483,9 @@ export enum ComponentRichImageOrder {
 }
 
 /** To have SEO-related properties to the pages we render [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/componentSeo) */
-export type ComponentSeo = Entry & {
+export type ComponentSeo = Entry & _Node & {
   __typename?: 'ComponentSeo';
+  _id: Scalars['ID']['output'];
   canonicalUrl?: Maybe<Scalars['String']['output']>;
   contentfulMetadata: ContentfulMetadata;
   follow?: Maybe<Scalars['Boolean']['output']>;
@@ -714,8 +717,9 @@ export enum ComponentSeoOrder {
 }
 
 /** [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/componentTextHighlight) */
-export type ComponentTextHighlight = Entry & {
+export type ComponentTextHighlight = Entry & _Node & {
   __typename?: 'ComponentTextHighlight';
+  _id: Scalars['ID']['output'];
   content?: Maybe<ComponentTextHighlightContent>;
   contentfulMetadata: ContentfulMetadata;
   linkedFrom?: Maybe<ComponentTextHighlightLinkingCollections>;
@@ -928,7 +932,7 @@ export type ContentfulMetadataTagsFilter = {
 
 /**
  * Represents a tag entity for finding and organizing content easily.
- *     Find out more here: https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/content-tags
+ *       Find out more here: https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/content-tags
  */
 export type ContentfulTag = {
   __typename?: 'ContentfulTag';
@@ -968,8 +972,9 @@ export enum EntryOrder {
 }
 
 /** [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/footerItemGroup) */
-export type FooterItemGroup = Entry & {
+export type FooterItemGroup = Entry & _Node & {
   __typename?: 'FooterItemGroup';
+  _id: Scalars['ID']['output'];
   contentfulMetadata: ContentfulMetadata;
   footerItemsCollection?: Maybe<FooterItemGroupFooterItemsCollection>;
   linkedFrom?: Maybe<FooterItemGroupLinkingCollections>;
@@ -1169,8 +1174,9 @@ export type ImageTransformOptions = {
 };
 
 /** [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/navItem) */
-export type NavItem = Entry & {
+export type NavItem = Entry & _Node & {
   __typename?: 'NavItem';
+  _id: Scalars['ID']['output'];
   contentfulMetadata: ContentfulMetadata;
   href?: Maybe<Scalars['String']['output']>;
   linkedFrom?: Maybe<NavItemLinkingCollections>;
@@ -1226,8 +1232,9 @@ export type NavItemFilter = {
 };
 
 /** [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/navItemGroup) */
-export type NavItemGroup = Entry & {
+export type NavItemGroup = Entry & _Node & {
   __typename?: 'NavItemGroup';
+  _id: Scalars['ID']['output'];
   contentfulMetadata: ContentfulMetadata;
   linkedFrom?: Maybe<NavItemGroupLinkingCollections>;
   mainNav?: Maybe<Scalars['String']['output']>;
@@ -1424,8 +1431,9 @@ export enum NavItemOrder {
 }
 
 /** To create individual blog posts [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/pageBlogPost) */
-export type PageBlogPost = Entry & {
+export type PageBlogPost = Entry & _Node & {
   __typename?: 'PageBlogPost';
+  _id: Scalars['ID']['output'];
   author?: Maybe<ComponentAuthor>;
   content?: Maybe<PageBlogPostContent>;
   contentfulMetadata: ContentfulMetadata;
@@ -1743,8 +1751,9 @@ export enum PageBlogPostRelatedBlogPostsCollectionOrder {
 }
 
 /** To have an entry point for the app (e.g. Homepage) [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/pageLanding) */
-export type PageLanding = Entry & {
+export type PageLanding = Entry & _Node & {
   __typename?: 'PageLanding';
+  _id: Scalars['ID']['output'];
   content?: Maybe<PageLandingContent>;
   contentfulMetadata: ContentfulMetadata;
   featuredBlogPost?: Maybe<PageBlogPost>;
@@ -2261,8 +2270,9 @@ export type SysFilter = {
 };
 
 /** [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/tagPage) */
-export type TagPage = Entry & {
+export type TagPage = Entry & _Node & {
   __typename?: 'TagPage';
+  _id: Scalars['ID']['output'];
   content?: Maybe<TagPageContent>;
   contentfulMetadata: ContentfulMetadata;
   internalName?: Maybe<Scalars['String']['output']>;
@@ -2665,7 +2675,7 @@ export type FooterItemGroupCollectionQuery = { __typename?: 'Query', footerItemG
 
 export type ImageFieldsFragment = { __typename: 'Asset', title?: string | null, description?: string | null, width?: number | null, height?: number | null, url?: string | null, contentType?: string | null, sys: { __typename?: 'Sys', id: string } };
 
-export type NavItemFieldsFragment = { __typename?: 'NavItem', name?: string | null, href?: string | null };
+export type NavItemFieldsFragment = { __typename: 'NavItem', name?: string | null, href?: string | null, sys: { __typename?: 'Sys', id: string } };
 
 export type NavItemGroupFieldsFragment = { __typename: 'NavItemGroup', name?: string | null, sys: { __typename?: 'Sys', id: string, spaceId: string }, navItemsCollection?: { __typename: 'NavItemGroupNavItemsCollection', items: Array<(
       { __typename?: 'NavItem' }
@@ -2749,7 +2759,10 @@ export type PageBlogPostCollectionQuery = { __typename?: 'Query', pageBlogPostCo
 export type PageLandingFieldsFragment = { __typename: 'PageLanding', internalName?: string | null, slug?: string | null, showTagCloud?: string | null, sys: { __typename?: 'Sys', id: string, spaceId: string, publishedAt?: any | null, firstPublishedAt?: any | null }, contentfulMetadata: { __typename?: 'ContentfulMetadata', tags: Array<{ __typename?: 'ContentfulTag', id?: string | null, name?: string | null } | null> }, logo?: { __typename?: 'Asset', url?: string | null } | null, content?: { __typename?: 'PageLandingContent', json: any, links: { __typename?: 'PageLandingContentLinks', entries: { __typename?: 'PageLandingContentEntries', block: Array<{ __typename?: 'ComponentAuthor' } | (
           { __typename?: 'ComponentRichImage' }
           & RichImageFieldsFragment
-        ) | { __typename?: 'ComponentSeo' } | { __typename?: 'ComponentTextHighlight' } | { __typename?: 'FooterItemGroup' } | { __typename?: 'NavItem' } | { __typename?: 'NavItemGroup' } | { __typename?: 'PageBlogPost' } | { __typename?: 'PageLanding' } | { __typename?: 'TagPage' } | null> } } } | null, seoFields?: (
+        ) | { __typename?: 'ComponentSeo' } | { __typename?: 'ComponentTextHighlight' } | { __typename?: 'FooterItemGroup' } | (
+          { __typename?: 'NavItem' }
+          & NavItemFieldsFragment
+        ) | { __typename?: 'NavItemGroup' } | { __typename?: 'PageBlogPost' } | { __typename?: 'PageLanding' } | { __typename?: 'TagPage' } | null> } } } | null, seoFields?: (
     { __typename?: 'ComponentSeo' }
     & SeoFieldsFragment
   ) | null, featuredBlogPost?: (
@@ -2862,6 +2875,10 @@ export type TextHighlightFieldsFragment = { __typename: 'ComponentTextHighlight'
 
 export const NavItemFieldsFragmentDoc = gql`
     fragment NavItemFields on NavItem {
+  __typename
+  sys {
+    id
+  }
   name
   href
 }
@@ -3077,6 +3094,7 @@ export const PageLandingFieldsFragmentDoc = gql`
       entries {
         block {
           ...RichImageFields
+          ...NavItemFields
         }
       }
     }
@@ -3286,6 +3304,7 @@ export const PageLandingDocument = gql`
     ${PageLandingFieldsFragmentDoc}
 ${RichImageFieldsFragmentDoc}
 ${ImageFieldsFragmentDoc}
+${NavItemFieldsFragmentDoc}
 ${SeoFieldsFragmentDoc}
 ${ReferencePageBlogPostFieldsFragmentDoc}
 ${AuthorFieldsFragmentDoc}
@@ -3301,6 +3320,7 @@ export const PageLandingCollectionDocument = gql`
     ${PageLandingFieldsFragmentDoc}
 ${RichImageFieldsFragmentDoc}
 ${ImageFieldsFragmentDoc}
+${NavItemFieldsFragmentDoc}
 ${SeoFieldsFragmentDoc}
 ${ReferencePageBlogPostFieldsFragmentDoc}
 ${AuthorFieldsFragmentDoc}

@@ -1,4 +1,8 @@
 fragment NavItemFields on NavItem {
+  __typename
+  sys {
+    id
+  }
   name
   href
 }

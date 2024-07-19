@@ -1768,6 +1768,22 @@
         "description": "To have author-related properties [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/componentAuthor)",
         "fields": [
           {
+            "name": "_id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "avatar",
             "description": null,
             "args": [
@@ -1921,6 +1937,11 @@
           {
             "kind": "INTERFACE",
             "name": "Entry",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
+            "name": "_Node",
             "ofType": null
           }
         ],
@@ -2614,6 +2635,22 @@
         "description": "To describe an image used in rich text fields [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/componentRichImage)",
         "fields": [
           {
+            "name": "_id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "caption",
             "description": null,
             "args": [
@@ -2792,6 +2829,11 @@
           {
             "kind": "INTERFACE",
             "name": "Entry",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
+            "name": "_Node",
             "ofType": null
           }
         ],
@@ -3349,6 +3391,22 @@
         "description": "To have SEO-related properties to the pages we render [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/componentSeo)",
         "fields": [
           {
+            "name": "_id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "canonicalUrl",
             "description": null,
             "args": [
@@ -3626,6 +3684,11 @@
           {
             "kind": "INTERFACE",
             "name": "Entry",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
+            "name": "_Node",
             "ofType": null
           }
         ],
@@ -4955,6 +5018,22 @@
         "description": "[See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/componentTextHighlight)",
         "fields": [
           {
+            "name": "_id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "content",
             "description": null,
             "args": [
@@ -5096,6 +5175,11 @@
           {
             "kind": "INTERFACE",
             "name": "Entry",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
+            "name": "_Node",
             "ofType": null
           }
         ],
@@ -6501,7 +6585,7 @@
       {
         "kind": "OBJECT",
         "name": "ContentfulTag",
-        "description": "Represents a tag entity for finding and organizing content easily.\n    Find out more here: https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/content-tags",
+        "description": "Represents a tag entity for finding and organizing content easily.\n      Find out more here: https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/content-tags",
         "fields": [
           {
             "name": "id",
@@ -6868,6 +6952,22 @@
         "description": "[See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/footerItemGroup)",
         "fields": [
           {
+            "name": "_id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "contentfulMetadata",
             "description": null,
             "args": [],
@@ -7048,6 +7148,11 @@
           {
             "kind": "INTERFACE",
             "name": "Entry",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
+            "name": "_Node",
             "ofType": null
           }
         ],
@@ -7945,6 +8050,22 @@
         "description": "[See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/navItem)",
         "fields": [
           {
+            "name": "_id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "contentfulMetadata",
             "description": null,
             "args": [],
@@ -8061,6 +8182,11 @@
           {
             "kind": "INTERFACE",
             "name": "Entry",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
+            "name": "_Node",
             "ofType": null
           }
         ],
@@ -8403,6 +8529,22 @@
         "description": "[See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/navItemGroup)",
         "fields": [
           {
+            "name": "_id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "contentfulMetadata",
             "description": null,
             "args": [],
@@ -8608,6 +8750,11 @@
           {
             "kind": "INTERFACE",
             "name": "Entry",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
+            "name": "_Node",
             "ofType": null
           }
         ],
@@ -9754,6 +9901,22 @@
         "description": "To create individual blog posts [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/pageBlogPost)",
         "fields": [
           {
+            "name": "_id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "author",
             "description": null,
             "args": [
@@ -10194,6 +10357,11 @@
           {
             "kind": "INTERFACE",
             "name": "Entry",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
+            "name": "_Node",
             "ofType": null
           }
         ],
@@ -12083,6 +12251,22 @@
         "description": "To have an entry point for the app (e.g. Homepage) [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/pageLanding)",
         "fields": [
           {
+            "name": "_id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "content",
             "description": null,
             "args": [
@@ -12473,6 +12657,11 @@
           {
             "kind": "INTERFACE",
             "name": "Entry",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
+            "name": "_Node",
             "ofType": null
           }
         ],
@@ -16186,6 +16375,22 @@
         "description": "[See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/tagPage)",
         "fields": [
           {
+            "name": "_id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "content",
             "description": null,
             "args": [
@@ -16490,6 +16695,11 @@
           {
             "kind": "INTERFACE",
             "name": "Entry",
+            "ofType": null
+          },
+          {
+            "kind": "INTERFACE",
+            "name": "_Node",
             "ofType": null
           }
         ],
@@ -17762,7 +17972,58 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
-        "possibleTypes": []
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "ComponentAuthor",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "ComponentRichImage",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "ComponentSeo",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "ComponentTextHighlight",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "FooterItemGroup",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "NavItem",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "NavItemGroup",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "PageBlogPost",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "PageLanding",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "TagPage",
+            "ofType": null
+          }
+        ]
       },
       {
         "kind": "OBJECT",

@@ -1,5 +1,4 @@
 import { createTranslation } from "@/app/i18n/server";
-import { notFound } from "next/navigation";
 import { locales, LocaleTypes } from "@/app/i18n/settings";
 import { client } from "@/lib/client";
 import { PageBlogPostOrder } from "@/lib/__generated/sdk";
@@ -16,8 +15,10 @@ import { Article, WithContext } from "schema-dts";
 import path from "path";
 import Script from "next/script";
 
+//Seo Tools Components
+import Slugify from "@/components/tools/slugify/slugify.component";
+
 export const revalidate = revalidateDuration; // revalidate at most every hour
-export const dynamic = "force-dynamic";
 
 const apikey = process.env.API_KEY;
 
@@ -26,14 +27,8 @@ interface PageParams {
   locale: string;
 }
 
-interface SearchParamsProps {
-  query?: string;
-  page?: string;
-}
-
 interface PageProps {
   params: PageParams;
-  searchParams?: SearchParamsProps;
 }
 
 const generateUrl = (locale: string, slug: string) => {
@@ -47,8 +42,6 @@ const generateUrl = (locale: string, slug: string) => {
   }
 };
 
-const WebUrl = process.env.NEXT_PUBLIC_BASE_URL as string;
-
 export async function generateMetadata(
   { params }: PageProps,
   parent: ResolvingMetadata
@@ -56,7 +49,7 @@ export async function generateMetadata(
   const [PagedataSeo] = await Promise.all([
     client.pageLanding({
       locale: params.locale.toString(),
-      slug: "tags",
+      slug: "slugify",
       preview: draftMode().isEnabled,
     }),
   ]);
@@ -64,6 +57,7 @@ export async function generateMetadata(
   const landingPage = PagedataSeo.pageLandingCollection?.items[0];
 
   const url = generateUrl(params.locale || "", params.slug || "");
+  const WebUrl = process.env.NEXT_PUBLIC_BASE_URL as string;
 
   return {
     title: landingPage?.seoFields?.pageTitle,
@@ -106,43 +100,29 @@ export async function generateMetadata(
   };
 }
 
-async function TagHomePage({ params, searchParams }: PageProps) {
-  const NUMBER_OF_USERS_TO_FETCH = 10;
-
-  const currentPage = Number(searchParams?.page) || 1;
-
+async function Slugify_SEO({ params }: PageProps) {
   // Make sure to use the correct namespace here.
   const { t } = await createTranslation(params.locale as LocaleTypes, "common");
   const { isEnabled } = draftMode();
   const landingPageData = await client.pageLanding({
     locale: params.locale.toString(),
     preview: isEnabled,
-    slug: "tags",
+    slug: "slugify",
   });
   const page = landingPageData.pageLandingCollection?.items[0];
 
-  const newOffset = Number(currentPage - 1) * NUMBER_OF_USERS_TO_FETCH;
-
   const blogPostsData = await client.pageBlogPostCollection({
-    limit: 10,
+    limit: 20,
     locale: params.locale.toString(),
-    skip: newOffset,
     preview: isEnabled,
     order: PageBlogPostOrder.PublishedDateDesc,
   });
 
   const posts = blogPostsData.pageBlogPostCollection?.items;
   const postCount = blogPostsData.pageBlogPostCollection?.total;
-
   const seoItem = page?.seoFields?.shareImagesCollection?.items[0];
 
   const showTagCloud = page?.showTagCloud === "Yes";
-
-  if (!page) {
-    // If a blog post can't be found,
-    // tell Next.js to render a 404 page.
-    return notFound();
-  }
 
   const jsonLd: WithContext<Article> = {
     "@context": "https://schema.org",
@@ -151,7 +131,7 @@ async function TagHomePage({ params, searchParams }: PageProps) {
     headline: page?.seoFields?.pageTitle || undefined,
     author: {
       "@type": "Person",
-      name: "E.G.",
+      name: page?.featuredBlogPost?.author?.name || undefined,
       // The full URL must be provided, including the website's domain.
       url: new URL(
         path.join(params.locale.toString() || ""),
@@ -167,8 +147,8 @@ async function TagHomePage({ params, searchParams }: PageProps) {
       },
     },
     image: seoItem?.url || undefined,
-    datePublished: page.sys.firstPublishedAt,
-    dateModified: page.sys.publishedAt,
+    datePublished: page?.sys.firstPublishedAt,
+    dateModified: page?.sys.publishedAt,
   };
 
   let { datanew } = {
@@ -196,15 +176,9 @@ async function TagHomePage({ params, searchParams }: PageProps) {
       datanew = searchTags.data;
     }
   }
-  if (!page) {
-    // If a blog post can't be found,
-    // tell Next.js to render a 404 page.
-    return notFound();
-  }
 
-  const highLightHeadings: any = page.textHighlightCollection?.items[0];
-
-  if (!posts) return;
+  const highLightHeadings: any = page?.textHighlightCollection?.items[0];
+  if (!page?.featuredBlogPost || !posts) return;
 
   return (
     <>
@@ -229,22 +203,23 @@ async function TagHomePage({ params, searchParams }: PageProps) {
       </Container>
       <Container className="mt-5">
         <div className="md:mx-24 md:my-16 sm:mx-16 sm:my-8">
+          {/* Slugify */}
+          <Slugify />
+        </div>
+        <div className="md:mx-24 md:my-16 sm:mx-16 sm:my-8">
           <LandingContent landing={page} />
         </div>
       </Container>
       <Container className="my-8 md:mb-10 lg:mb-16">
         {posts.length > 0 && (
-          <h2 className="mb-4 md:mb-6">
-            {t("landingPage.latestArticles")} - {postCount}
-          </h2>
+          <h2 className="mb-4 md:mb-6">{t("landingPage.latestArticles")}</h2>
         )}
-
         <ArticleTileGrid
           className="grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
           articles={posts}
           postCount={postCount}
-          slug=""
-          source="loadmoretags"
+          slug={page.featuredBlogPost.slug}
+          source="loadmore"
           locale={params.locale.toString()}
         />
       </Container>
@@ -252,4 +227,4 @@ async function TagHomePage({ params, searchParams }: PageProps) {
   );
 }
 
-export default TagHomePage;
+export default Slugify_SEO;

@@ -124,7 +124,8 @@ enum AssetOrder {
 """
 To have author-related properties [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/componentAuthor)
 """
-type ComponentAuthor implements Entry {
+type ComponentAuthor implements Entry & _Node {
+  _id: ID!
   avatar(locale: String, preview: Boolean): Asset
   contentfulMetadata: ContentfulMetadata!
   internalName(locale: String): String
@@ -204,7 +205,8 @@ enum ComponentAuthorOrder {
 """
 To describe an image used in rich text fields [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/componentRichImage)
 """
-type ComponentRichImage implements Entry {
+type ComponentRichImage implements Entry & _Node {
+  _id: ID!
   caption(locale: String): String
   contentfulMetadata: ContentfulMetadata!
   fullWidth(locale: String): Boolean
@@ -270,7 +272,8 @@ enum ComponentRichImageOrder {
 """
 To have SEO-related properties to the pages we render [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/componentSeo)
 """
-type ComponentSeo implements Entry {
+type ComponentSeo implements Entry & _Node {
+  _id: ID!
   canonicalUrl(locale: String): String
   contentfulMetadata: ContentfulMetadata!
   follow(locale: String): Boolean
@@ -416,7 +419,8 @@ enum ComponentSeoOrder {
 """
 [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/componentTextHighlight)
 """
-type ComponentTextHighlight implements Entry {
+type ComponentTextHighlight implements Entry & _Node {
+  _id: ID!
   content(locale: String): ComponentTextHighlightContent
   contentfulMetadata: ContentfulMetadata!
   linkedFrom(allowedLocales: [String]): ComponentTextHighlightLinkingCollections
@@ -568,7 +572,7 @@ input ContentfulMetadataTagsFilter {
 
 """
 Represents a tag entity for finding and organizing content easily.
-    Find out more here: https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/content-tags
+      Find out more here: https://www.contentful.com/developers/docs/references/content-delivery-api/#/reference/content-tags
 """
 type ContentfulTag {
   id: String
@@ -621,7 +625,8 @@ enum EntryOrder {
 """
 [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/footerItemGroup)
 """
-type FooterItemGroup implements Entry {
+type FooterItemGroup implements Entry & _Node {
+  _id: ID!
   contentfulMetadata: ContentfulMetadata!
   footerItemsCollection(limit: Int = 100, locale: String, order: [FooterItemGroupFooterItemsCollectionOrder], preview: Boolean, skip: Int = 0, where: NavItemFilter): FooterItemGroupFooterItemsCollection
   linkedFrom(allowedLocales: [String]): FooterItemGroupLinkingCollections
@@ -830,7 +835,8 @@ scalar JSON
 """
 [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/navItem)
 """
-type NavItem implements Entry {
+type NavItem implements Entry & _Node {
+  _id: ID!
   contentfulMetadata: ContentfulMetadata!
   href(locale: String): String
   linkedFrom(allowedLocales: [String]): NavItemLinkingCollections
@@ -869,7 +875,8 @@ input NavItemFilter {
 """
 [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/navItemGroup)
 """
-type NavItemGroup implements Entry {
+type NavItemGroup implements Entry & _Node {
+  _id: ID!
   contentfulMetadata: ContentfulMetadata!
   linkedFrom(allowedLocales: [String]): NavItemGroupLinkingCollections
   mainNav(locale: String): String
@@ -1001,7 +1008,8 @@ enum NavItemOrder {
 """
 To create individual blog posts [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/pageBlogPost)
 """
-type PageBlogPost implements Entry {
+type PageBlogPost implements Entry & _Node {
+  _id: ID!
   author(locale: String, preview: Boolean, where: ComponentAuthorFilter): ComponentAuthor
   content(locale: String): PageBlogPostContent
   contentfulMetadata: ContentfulMetadata!
@@ -1208,7 +1216,8 @@ enum PageBlogPostRelatedBlogPostsCollectionOrder {
 """
 To have an entry point for the app (e.g. Homepage) [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/pageLanding)
 """
-type PageLanding implements Entry {
+type PageLanding implements Entry & _Node {
+  _id: ID!
   content(locale: String): PageLandingContent
   contentfulMetadata: ContentfulMetadata!
   featuredBlogPost(locale: String, preview: Boolean, where: PageBlogPostFilter): PageBlogPost
@@ -1443,7 +1452,8 @@ input SysFilter {
 """
 [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/tagPage)
 """
-type TagPage implements Entry {
+type TagPage implements Entry & _Node {
+  _id: ID!
   content(locale: String): TagPageContent
   contentfulMetadata: ContentfulMetadata!
   internalName(locale: String): String

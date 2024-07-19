@@ -24,6 +24,7 @@ fragment PageLandingFields on PageLanding {
       entries {
         block {
           ...RichImageFields
+          ...NavItemFields
         }
       }
     }

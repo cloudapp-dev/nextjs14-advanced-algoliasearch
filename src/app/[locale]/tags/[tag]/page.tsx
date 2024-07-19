@@ -164,6 +164,7 @@ async function TagPage({ params }: PageProps) {
   const page = PageData.tagPageCollection?.items[0];
 
   const posts = blogPostsData.pageBlogPostCollection?.items;
+  const postCount = blogPostsData.pageBlogPostCollection?.total;
   const selectedPost = blogPostsData.pageBlogPostCollection?.items[0];
 
   if (!PageData || !page) {
@@ -282,7 +283,9 @@ async function TagPage({ params }: PageProps) {
       </Container>
       <Container className="mt-5">
         {posts.length > 0 && (
-          <h2 className="mb-4 md:mb-6">{t("tagPage.relatedArticles")}</h2>
+          <h2 className="mb-4 md:mb-6">
+            {t("tagPage.relatedArticles")} - {postCount}
+          </h2>
         )}
         <ArticleTileGrid
           className="grid-cols-1 md:grid-cols-2 lg:grid-cols-4"

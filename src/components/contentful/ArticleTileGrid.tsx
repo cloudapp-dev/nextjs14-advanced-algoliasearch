@@ -1,16 +1,13 @@
 "use client";
 import { HTMLProps } from "react";
 import { twMerge } from "tailwind-merge";
-import { Button } from "@tremor/react";
-
 import { ArticleTile } from "@/components/contentful/ArticleTile";
 import { PageBlogPostFieldsFragment } from "@/lib/__generated/sdk";
 
-// import { useInView } from "react-intersection-observer";
+import { useInView } from "react-intersection-observer";
 import { useState, useEffect } from "react";
 import { getPosts } from "@/actions/getPosts";
 
-import Pagination from "@/components/pagination/pagination.component";
 import { useSearchParams } from "next/navigation";
 
 interface ArticleTileGridProps extends HTMLProps<HTMLDivElement> {
@@ -35,12 +32,7 @@ export default function ArticleTileGrid({
   const [offset, setOffset] = useState(NUMBER_OF_USERS_TO_FETCH);
   const [posts, setPosts] = useState<any>(articles);
   // Infinte scroll
-  // const { ref, inView } = useInView();
-
-  //Pagination
-  const totalPages = postCount || 0;
-  const searchParams = useSearchParams();
-  const currentPage = Number(searchParams.get("page")) || 0;
+  const { ref, inView } = useInView();
 
   const loadMorePosts = async () => {
     const apiPosts = await getPosts(
@@ -57,12 +49,12 @@ export default function ArticleTileGrid({
   };
 
   //Infinte scroll
-
-  // useEffect(() => {
-  //   if (inView) {
-  //     loadMoreUsers();
-  //   }
-  // }, [inView]);
+  useEffect(() => {
+    if (inView) {
+      loadMorePosts();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView]);
 
   return posts && posts.length > 0 ? (
     <>
@@ -79,9 +71,10 @@ export default function ArticleTileGrid({
       </div>
       {/* Infinite Scroll */}
       {/* <div ref={ref}>Loading...</div> */}
+      <div ref={ref}></div>
 
       {/* Load More Button */}
-      {source !== "relatedposts" && (
+      {/* {source !== "relatedposts" && (
         <>
           <div className="flex flex-col items-center">
             <Button
@@ -95,7 +88,7 @@ export default function ArticleTileGrid({
           </div>
           {source !== "tag" && <Pagination totalPages={totalPages} />}
         </>
-      )}
+      )} */}
     </>
   ) : null;
 }

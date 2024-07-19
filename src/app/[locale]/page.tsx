@@ -20,21 +20,7 @@ import { TagCloudSimpleHome } from "@/components/search/tagcloudsimpleHome.compo
 import Link from "next/link";
 import { LandingContent } from "@/components/contentful/ArticleContentLanding";
 
-import { TableSkeleton } from "@/components/pagination/skeleton.component";
-import { Suspense } from "react";
-
-import SyntaxHighlight from "@/components/tools/syntaxhighlight/syntaxhighlight.component";
-
-import Sitemapcounter from "@/components/tools/sitemapcounter/counter.component";
-// import WordCount from "@/components/tools/wordcount/wordcount.component";
-import SitemapChecker from "@/components/tools/sitemapchecker/sitemapchecker.component";
-// import Slugify from "@/components/tools/slugify/slugify.component";
-
-//Kafka
-// import { consumeMessages } from "@/lib/kafkaconsmer";
-
 export const revalidate = revalidateDuration; // revalidate at most every hour
-export const dynamic = "force-dynamic";
 
 interface PageParams {
   slug: string;
@@ -265,64 +251,26 @@ async function Home({ params, searchParams }: PageProps) {
         <div className="md:mx-24 md:my-24 sm:mx-16 sm:my-16">
           <LandingContent landing={page} />
         </div>
-        <SyntaxHighlight code="let a = 1 + 4" filename="index.js" />
-        <SyntaxHighlight
-          code="console.log('Hello, world kajfdadjfasdjfaösdjfaskdjfakdsjfkasdjfksadjfkasdjföajdsfökajsdfökjadsfökjasdöfkjadskfjasdöfjasödfkj    akdsfjakdjfkadjsföasdjfaösfkdjö!') // [!code --]"
-          lang="typescript"
-          filename="index.ts"
-        />
-        <SyntaxHighlight
-          code={`fn main() { println!(\"Hello, world!\"); } // [!code highlight]`}
-          lang="rust"
-          theme="github-dark"
-          filename="main.rs"
-        />
-        <SyntaxHighlight
-          code="console.log('Hello, world!') // [!code ++]"
-          lang="typescript"
-        />
-
-        <SyntaxHighlight
-          code={`return (// [!code ++]
-  <div className="rounded-lg bg-gradient-to-r from-sky-300 to-sky-500 p-4 !pr-0 md:p-8 lg:p-12 [&>pre]:rounded-none max-w-xl">// [!code --]
-    <div className="overflow-hidden rounded-s-lg">// [!code highlight]
-      <div className="flex items-center justify-between bg-gradient-to-r from-neutral-900 to-neutral-800 py-2 pl-2 pr-4 text-sm">
-        <span className="-mb-[calc(0.5rem+2px)] rounded-t-lg border-2 border-white/5 border-b-neutral-700 bg-neutral-800 px-4 py-2 ">
-          {filename}
-        </span>
-      </div>
-      <div
-        className="border-t-2 border-neutral-700 text-sm [&>pre]:overflow-x-auto [&>pre]:!bg-neutral-900 [&>pre]:py-3 [&>pre]:pl-4 [&>pre]:pr-5 [&>pre]:leading-snug [&_code]:block [&_code]:w-fit [&_code]:min-w-full"
-        dangerouslySetInnerHTML={{ __html: html }}
-      ></div>
-    </div>
-  </div>
-);
-`}
-          lang="tsx"
-          theme="ayu-dark"
-          filename="app/page.tsx"
-        />
       </Container>
 
       <Container className="my-8 md:mb-10 lg:mb-16">
         {posts.length > 0 && (
-          <h2 className="mb-4 md:mb-6">{t("landingPage.latestArticles")}</h2>
+          <h2 className="mb-4 md:mb-6">
+            {t("landingPage.latestArticles")} - {postCount}
+          </h2>
         )}
 
-        <Suspense key={currentPage} fallback={<TableSkeleton />}>
-          <ArticleTileGrid
-            className="grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
-            articles={posts}
-            postCount={postCount}
-            slug={page.featuredBlogPost.slug}
-            source="loadmore"
-            locale={params.locale.toString()}
-          />
-        </Suspense>
+        <ArticleTileGrid
+          className="grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
+          articles={posts}
+          postCount={postCount}
+          slug={page.featuredBlogPost.slug}
+          source="loadmore"
+          locale={params.locale.toString()}
+        />
 
         {/* SitemapCounter */}
-        <Sitemapcounter />
+        {/* <Sitemapcounter /> */}
         {/* SitemapChecker */}
         {/* <SitemapChecker /> */}
         {/* WordCount */}
