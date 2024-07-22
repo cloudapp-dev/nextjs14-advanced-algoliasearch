@@ -54,7 +54,7 @@ const Slugify: React.FC = () => {
           type="text"
           value={inputText}
           onChange={handleInputChange}
-          className="block w-full h-10 pl-2 text-black border-gray-200 rounded-md bg-gray200 sm:text-base"
+          className="block w-full h-10 pl-2 text-black border-gray-200 rounded-md bg-gray-200 sm:text-base"
           placeholder="Enter text to slugify"
         />
         <div className="flex space-x-2">
@@ -75,7 +75,9 @@ const Slugify: React.FC = () => {
           <p className="text-2xl font-semibold">
             OUTPUT: (Clean URL slug - Slugified Text)
           </p>
-          <p className="mt-2 text-black min-h-fit">{slugifiedText}</p>
+          <div className="block w-full mt-2 pl-2 text-black border-gray-200 rounded-md bg-gray-200 sm:text-base min-h-fit">
+            {slugifiedText}
+          </div>
           <button
             onClick={handleCopy}
             className="w-full px-4 py-2 mt-4 font-semibold text-white transition duration-300 bg-blue-500 rounded-md hover:bg-blue-600"
