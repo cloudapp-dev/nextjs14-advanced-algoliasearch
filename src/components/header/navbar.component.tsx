@@ -39,56 +39,14 @@ function classNames(...classes: any[]) {
 interface Linkitems {
   key: number;
   name: string;
+  shortDescription?: string;
   href: string;
+  icon?: any;
+  submenutitems?: any;
+  breakpoint?: string;
 }
 
 export default function Navbar({ menuItems, logourl }: any) {
-  const resources = [
-    {
-      name: "Overview",
-      description: "Learn how to maximize our platform",
-      href: "/seo-tools",
-      icon: BookmarkSquareIcon,
-    },
-    {
-      name: "Slugify",
-      description: "Get all of your questions answered",
-      href: "/seo-tools/slugify",
-      icon: LifebuoyIcon,
-    },
-
-    // {
-    //   name: "Events",
-    //   description: "See meet-ups and other events near you",
-    //   href: "#",
-    //   icon: CalendarDaysIcon,
-    // },
-  ];
-  // const recentPosts = [
-  //   {
-  //     id: 1,
-  //     title: "Boost your conversion rate",
-  //     href: "#",
-  //     date: "Mar 5, 2023",
-  //     datetime: "2023-03-05",
-  //   },
-  //   {
-  //     id: 2,
-  //     title:
-  //       "How to use search engine optimization to drive traffic to your site",
-  //     href: "#",
-  //     date: "Feb 25, 2023",
-  //     datetime: "2023-02-25",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Improve your customer experience",
-  //     href: "#",
-  //     date: "Feb 21, 2023",
-  //     datetime: "2023-02-21",
-  //   },
-  // ];
-
   // Internationalization
   const locale = useParams()?.locale as LocaleTypes;
   const pathname = usePathname();
@@ -131,8 +89,6 @@ export default function Navbar({ menuItems, logourl }: any) {
       }
     );
 
-    // console.log(logoutfeedback);
-    // console.log(SIGN_OUT_URL);
     push(SIGN_OUT_URL);
   }
 
@@ -148,6 +104,68 @@ export default function Navbar({ menuItems, logourl }: any) {
       >
         {name}
       </a>
+    );
+  }
+
+  function SubMenu({
+    href,
+    name,
+    shortDescription,
+    submenutitems,
+    breakpoint,
+  }: Linkitems) {
+    return (
+      <Popover className="relative">
+        <Popover.Button className="border-transparent text-gray-500 dark:text-gray-50 hover:border-gray-300 hover:text-gray-700 inline-flex items-center text-base px-1 pt-1 border-b-2 font-medium">
+          {breakpoint === "desktop" ? (
+            <>
+              <span>{name}</span>
+              <ChevronDownIcon className="w-5 h-5" aria-hidden="true" />
+            </>
+          ) : (
+            <div className="pl-3 flex">
+              <span>{name}</span>
+              <ChevronDownIcon className="ml-2 w-5 h-5" aria-hidden="true" />
+            </div>
+          )}
+        </Popover.Button>
+
+        <Popover.Panel className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in">
+          <div className="flex-auto w-screen max-w-md overflow-hidden text-sm leading-6 bg-white dark:bg-gray-500 shadow-lg rounded-3xl ring-1 ring-gray-900/5">
+            <div className="p-4">
+              {submenutitems.map((item: Linkitems) => (
+                <div
+                  key={item.name}
+                  className="relative flex p-4 rounded-lg group gap-x-6 hover:bg-gray-50"
+                >
+                  <div className="flex items-center justify-center flex-none mt-1 rounded-lg h-11 w-11 bg-gray-50 group-hover:bg-white">
+                    {item.icon === "BookmarkSquareIcon" ? (
+                      <BookmarkSquareIcon
+                        className="w-6 h-6 text-gray-600 group-hover:text-indigo-600"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <LifebuoyIcon
+                        className="w-6 h-6 text-gray-600 group-hover:text-indigo-600"
+                        aria-hidden="true"
+                      />
+                    )}
+                  </div>
+                  <div>
+                    <a href={item.href} className="font-semibold text-gray-900">
+                      {item.name}
+                      <span className="absolute inset-0" />
+                    </a>
+                    <div className="mt-1 text-gray-800">
+                      {item.shortDescription}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Popover.Panel>
+      </Popover>
     );
   }
 
@@ -195,85 +213,23 @@ export default function Navbar({ menuItems, logourl }: any) {
 
             <div className="hidden lg:ml-6 lg:flex lg:space-x-8">
               {/* Desktop View */}
-              {menuItems.map((menuItem: any, index: number) => (
-                <NavigationLink
-                  key={index}
-                  // href={menuItem.href}
-                  href={`/${locale}${menuItem.href}`}
-                  name={menuItem.name}
-                />
-              ))}
-
-              <Popover className="relative">
-                <Popover.Button className="border-transparent text-gray-500 dark:text-gray-50 hover:border-gray-300 hover:text-gray-700 inline-flex items-center text-base px-1 pt-1 border-b-2 font-medium">
-                  <span>Seo-Tools</span>
-                  <ChevronDownIcon className="w-5 h-5" aria-hidden="true" />
-                </Popover.Button>
-
-                <Popover.Panel className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in">
-                  <div className="flex-auto w-screen max-w-md overflow-hidden text-sm leading-6 bg-white shadow-lg rounded-3xl ring-1 ring-gray-900/5">
-                    <div className="p-4">
-                      {resources.map((item) => (
-                        <div
-                          key={item.name}
-                          className="relative flex p-4 rounded-lg group gap-x-6 hover:bg-gray-50"
-                        >
-                          <div className="flex items-center justify-center flex-none mt-1 rounded-lg h-11 w-11 bg-gray-50 group-hover:bg-white">
-                            <item.icon
-                              className="w-6 h-6 text-gray-600 group-hover:text-indigo-600"
-                              aria-hidden="true"
-                            />
-                          </div>
-                          <div>
-                            <a
-                              href={item.href}
-                              className="font-semibold text-gray-900"
-                            >
-                              {item.name}
-                              <span className="absolute inset-0" />
-                            </a>
-                            <p className="mt-1 text-gray-600">
-                              {item.description}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                    {/*<div className="p-8 bg-gray-50">
-                      <div className="flex justify-between">
-                        <h3 className="text-sm font-semibold leading-6 text-gray-500">
-                          Recent posts
-                        </h3>
-                        <a
-                          href="#"
-                          className="text-sm font-semibold leading-6 text-indigo-600"
-                        >
-                          See all <span aria-hidden="true">&rarr;</span>
-                        </a>
-                      </div>
-                       <ul role="list" className="mt-6 space-y-6">
-                        {recentPosts.map((post) => (
-                          <li key={post.id} className="relative">
-                            <time
-                              dateTime={post.datetime}
-                              className="block text-xs leading-6 text-gray-600"
-                            >
-                              {post.date}
-                            </time>
-                            <a
-                              href={post.href}
-                              className="block text-sm font-semibold leading-6 text-gray-900 truncate"
-                            >
-                              {post.title}
-                              <span className="absolute inset-0" />
-                            </a>
-                          </li>
-                        ))}
-                      </ul> 
-                    </div>*/}
-                  </div>
-                </Popover.Panel>
-              </Popover>
+              {menuItems.map((menuItem: any, index: number) =>
+                menuItem.type === "Menu" ? (
+                  <NavigationLink
+                    key={index}
+                    href={`/${locale}${menuItem.href}`}
+                    name={menuItem.name}
+                  />
+                ) : (
+                  <SubMenu
+                    key={index}
+                    href={`/${locale}${menuItem.href}`}
+                    name={menuItem.name}
+                    submenutitems={menuItem.subMenuItemsCollection.items}
+                    breakpoint="desktop"
+                  />
+                )
+              )}
             </div>
 
             <div className="flex items-center justify-center flex-1 px-2 lg:ml-6 lg:justify-end">
@@ -450,84 +406,23 @@ export default function Navbar({ menuItems, logourl }: any) {
           <Disclosure.Panel className="lg:hidden">
             <div className="pt-2 pb-3 space-y-1">
               {/* Only show up in Mobile view */}
-              {menuItems.map((menuItem: any, index: number) => (
-                <NavigationLinkDisclosure
-                  key={index}
-                  // href={menuItem.href}
-                  href={`/${locale}${menuItem.href}`}
-                  name={menuItem.name}
-                />
-              ))}
-              <Popover className="relative">
-                <Popover.Button className="border-transparent text-gray-600 dark:text-gray-100 hover:bg-gray-100 dark:hover:text-indigo-700 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
-                  <span>Seo-Tools</span>
-                  <ChevronDownIcon className="w-5 h-5" aria-hidden="true" />
-                </Popover.Button>
-
-                <Popover.Panel className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in">
-                  <div className="flex-auto w-screen max-w-md overflow-hidden text-sm leading-6 bg-white shadow-lg rounded-3xl ring-1 ring-gray-900/5">
-                    <div className="p-4">
-                      {resources.map((item) => (
-                        <div
-                          key={item.name}
-                          className="relative flex p-4 rounded-lg group gap-x-6 hover:bg-gray-50"
-                        >
-                          <div className="flex items-center justify-center flex-none mt-1 rounded-lg h-11 w-11 bg-gray-50 group-hover:bg-white">
-                            <item.icon
-                              className="w-6 h-6 text-gray-600 group-hover:text-indigo-600"
-                              aria-hidden="true"
-                            />
-                          </div>
-                          <div>
-                            <a
-                              href={item.href}
-                              className="font-semibold text-gray-900"
-                            >
-                              {item.name}
-                              <span className="absolute inset-0" />
-                            </a>
-                            <p className="mt-1 text-gray-600">
-                              {item.description}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                    {/*<div className="p-8 bg-gray-50">
-                      <div className="flex justify-between">
-                        <h3 className="text-sm font-semibold leading-6 text-gray-500">
-                          Recent posts
-                        </h3>
-                        <a
-                          href="#"
-                          className="text-sm font-semibold leading-6 text-indigo-600"
-                        >
-                          See all <span aria-hidden="true">&rarr;</span>
-                        </a>
-                      </div>
-                       <ul role="list" className="mt-6 space-y-6">
-                        {recentPosts.map((post) => (
-                          <li key={post.id} className="relative">
-                            <time
-                              dateTime={post.datetime}
-                              className="block text-xs leading-6 text-gray-600"
-                            >
-                              {post.date}
-                            </time>
-                            <a
-                              href={post.href}
-                              className="block text-sm font-semibold leading-6 text-gray-900 truncate"
-                            >
-                              {post.title}
-                              <span className="absolute inset-0" />
-                            </a>
-                          </li>
-                        ))}
-                      </ul> 
-                    </div>*/}
-                  </div>
-                </Popover.Panel>
-              </Popover>
+              {menuItems.map((menuItem: any, index: number) =>
+                menuItem.type === "Menu" ? (
+                  <NavigationLinkDisclosure
+                    key={index}
+                    href={`/${locale}${menuItem.href}`}
+                    name={menuItem.name}
+                  />
+                ) : (
+                  <SubMenu
+                    key={index}
+                    href={`/${locale}${menuItem.href}`}
+                    name={menuItem.name}
+                    submenutitems={menuItem.subMenuItemsCollection.items}
+                    breakpoint="mobile"
+                  />
+                )
+              )}
             </div>
           </Disclosure.Panel>
         </>

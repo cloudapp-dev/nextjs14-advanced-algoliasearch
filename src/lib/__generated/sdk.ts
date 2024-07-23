@@ -1040,8 +1040,12 @@ export type FooterItemGroupFooterItemsCollection = {
 export enum FooterItemGroupFooterItemsCollectionOrder {
   HrefAsc = 'href_ASC',
   HrefDesc = 'href_DESC',
+  IconAsc = 'icon_ASC',
+  IconDesc = 'icon_DESC',
   NameAsc = 'name_ASC',
   NameDesc = 'name_DESC',
+  ShortDescriptionAsc = 'shortDescription_ASC',
+  ShortDescriptionDesc = 'shortDescription_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -1049,7 +1053,9 @@ export enum FooterItemGroupFooterItemsCollectionOrder {
   SysPublishedAtAsc = 'sys_publishedAt_ASC',
   SysPublishedAtDesc = 'sys_publishedAt_DESC',
   SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
-  SysPublishedVersionDesc = 'sys_publishedVersion_DESC'
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+  TypeAsc = 'type_ASC',
+  TypeDesc = 'type_DESC'
 }
 
 export type FooterItemGroupLinkingCollections = {
@@ -1179,14 +1185,24 @@ export type NavItem = Entry & _Node & {
   _id: Scalars['ID']['output'];
   contentfulMetadata: ContentfulMetadata;
   href?: Maybe<Scalars['String']['output']>;
+  icon?: Maybe<Scalars['String']['output']>;
   linkedFrom?: Maybe<NavItemLinkingCollections>;
   name?: Maybe<Scalars['String']['output']>;
+  shortDescription?: Maybe<Scalars['String']['output']>;
+  subMenuItemsCollection?: Maybe<NavItemSubMenuItemsCollection>;
   sys: Sys;
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 
 /** [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/navItem) */
 export type NavItemHrefArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+/** [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/navItem) */
+export type NavItemIconArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -1199,6 +1215,29 @@ export type NavItemLinkedFromArgs = {
 
 /** [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/navItem) */
 export type NavItemNameArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+/** [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/navItem) */
+export type NavItemShortDescriptionArgs = {
+  locale?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+/** [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/navItem) */
+export type NavItemSubMenuItemsCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  order?: InputMaybe<Array<InputMaybe<NavItemSubMenuItemsCollectionOrder>>>;
+  preview?: InputMaybe<Scalars['Boolean']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<NavItemFilter>;
+};
+
+
+/** [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/navItem) */
+export type NavItemTypeArgs = {
   locale?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -1221,6 +1260,13 @@ export type NavItemFilter = {
   href_not?: InputMaybe<Scalars['String']['input']>;
   href_not_contains?: InputMaybe<Scalars['String']['input']>;
   href_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  icon?: InputMaybe<Scalars['String']['input']>;
+  icon_contains?: InputMaybe<Scalars['String']['input']>;
+  icon_exists?: InputMaybe<Scalars['Boolean']['input']>;
+  icon_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  icon_not?: InputMaybe<Scalars['String']['input']>;
+  icon_not_contains?: InputMaybe<Scalars['String']['input']>;
+  icon_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   name?: InputMaybe<Scalars['String']['input']>;
   name_contains?: InputMaybe<Scalars['String']['input']>;
   name_exists?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1228,7 +1274,23 @@ export type NavItemFilter = {
   name_not?: InputMaybe<Scalars['String']['input']>;
   name_not_contains?: InputMaybe<Scalars['String']['input']>;
   name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  shortDescription?: InputMaybe<Scalars['String']['input']>;
+  shortDescription_contains?: InputMaybe<Scalars['String']['input']>;
+  shortDescription_exists?: InputMaybe<Scalars['Boolean']['input']>;
+  shortDescription_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  shortDescription_not?: InputMaybe<Scalars['String']['input']>;
+  shortDescription_not_contains?: InputMaybe<Scalars['String']['input']>;
+  shortDescription_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  subMenuItems?: InputMaybe<CfNavItemNestedFilter>;
+  subMenuItemsCollection_exists?: InputMaybe<Scalars['Boolean']['input']>;
   sys?: InputMaybe<SysFilter>;
+  type?: InputMaybe<Scalars['String']['input']>;
+  type_contains?: InputMaybe<Scalars['String']['input']>;
+  type_exists?: InputMaybe<Scalars['Boolean']['input']>;
+  type_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  type_not?: InputMaybe<Scalars['String']['input']>;
+  type_not_contains?: InputMaybe<Scalars['String']['input']>;
+  type_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 /** [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/navItemGroup) */
@@ -1327,8 +1389,12 @@ export type NavItemGroupNavItemsCollection = {
 export enum NavItemGroupNavItemsCollectionOrder {
   HrefAsc = 'href_ASC',
   HrefDesc = 'href_DESC',
+  IconAsc = 'icon_ASC',
+  IconDesc = 'icon_DESC',
   NameAsc = 'name_ASC',
   NameDesc = 'name_DESC',
+  ShortDescriptionAsc = 'shortDescription_ASC',
+  ShortDescriptionDesc = 'shortDescription_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -1336,7 +1402,9 @@ export enum NavItemGroupNavItemsCollectionOrder {
   SysPublishedAtAsc = 'sys_publishedAt_ASC',
   SysPublishedAtDesc = 'sys_publishedAt_DESC',
   SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
-  SysPublishedVersionDesc = 'sys_publishedVersion_DESC'
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+  TypeAsc = 'type_ASC',
+  TypeDesc = 'type_DESC'
 }
 
 export enum NavItemGroupOrder {
@@ -1358,6 +1426,7 @@ export type NavItemLinkingCollections = {
   __typename?: 'NavItemLinkingCollections';
   entryCollection?: Maybe<EntryCollection>;
   footerItemGroupCollection?: Maybe<FooterItemGroupCollection>;
+  navItemCollection?: Maybe<NavItemCollection>;
   navItemGroupCollection?: Maybe<NavItemGroupCollection>;
 };
 
@@ -1374,6 +1443,15 @@ export type NavItemLinkingCollectionsFooterItemGroupCollectionArgs = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   locale?: InputMaybe<Scalars['String']['input']>;
   order?: InputMaybe<Array<InputMaybe<NavItemLinkingCollectionsFooterItemGroupCollectionOrder>>>;
+  preview?: InputMaybe<Scalars['Boolean']['input']>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type NavItemLinkingCollectionsNavItemCollectionArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  order?: InputMaybe<Array<InputMaybe<NavItemLinkingCollectionsNavItemCollectionOrder>>>;
   preview?: InputMaybe<Scalars['Boolean']['input']>;
   skip?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -1400,6 +1478,27 @@ export enum NavItemLinkingCollectionsFooterItemGroupCollectionOrder {
   SysPublishedVersionDesc = 'sys_publishedVersion_DESC'
 }
 
+export enum NavItemLinkingCollectionsNavItemCollectionOrder {
+  HrefAsc = 'href_ASC',
+  HrefDesc = 'href_DESC',
+  IconAsc = 'icon_ASC',
+  IconDesc = 'icon_DESC',
+  NameAsc = 'name_ASC',
+  NameDesc = 'name_DESC',
+  ShortDescriptionAsc = 'shortDescription_ASC',
+  ShortDescriptionDesc = 'shortDescription_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+  TypeAsc = 'type_ASC',
+  TypeDesc = 'type_DESC'
+}
+
 export enum NavItemLinkingCollectionsNavItemGroupCollectionOrder {
   MainNavAsc = 'mainNav_ASC',
   MainNavDesc = 'mainNav_DESC',
@@ -1418,8 +1517,12 @@ export enum NavItemLinkingCollectionsNavItemGroupCollectionOrder {
 export enum NavItemOrder {
   HrefAsc = 'href_ASC',
   HrefDesc = 'href_DESC',
+  IconAsc = 'icon_ASC',
+  IconDesc = 'icon_DESC',
   NameAsc = 'name_ASC',
   NameDesc = 'name_DESC',
+  ShortDescriptionAsc = 'shortDescription_ASC',
+  ShortDescriptionDesc = 'shortDescription_DESC',
   SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
   SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
   SysIdAsc = 'sys_id_ASC',
@@ -1427,7 +1530,38 @@ export enum NavItemOrder {
   SysPublishedAtAsc = 'sys_publishedAt_ASC',
   SysPublishedAtDesc = 'sys_publishedAt_DESC',
   SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
-  SysPublishedVersionDesc = 'sys_publishedVersion_DESC'
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+  TypeAsc = 'type_ASC',
+  TypeDesc = 'type_DESC'
+}
+
+export type NavItemSubMenuItemsCollection = {
+  __typename?: 'NavItemSubMenuItemsCollection';
+  items: Array<Maybe<NavItem>>;
+  limit: Scalars['Int']['output'];
+  skip: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
+};
+
+export enum NavItemSubMenuItemsCollectionOrder {
+  HrefAsc = 'href_ASC',
+  HrefDesc = 'href_DESC',
+  IconAsc = 'icon_ASC',
+  IconDesc = 'icon_DESC',
+  NameAsc = 'name_ASC',
+  NameDesc = 'name_DESC',
+  ShortDescriptionAsc = 'shortDescription_ASC',
+  ShortDescriptionDesc = 'shortDescription_DESC',
+  SysFirstPublishedAtAsc = 'sys_firstPublishedAt_ASC',
+  SysFirstPublishedAtDesc = 'sys_firstPublishedAt_DESC',
+  SysIdAsc = 'sys_id_ASC',
+  SysIdDesc = 'sys_id_DESC',
+  SysPublishedAtAsc = 'sys_publishedAt_ASC',
+  SysPublishedAtDesc = 'sys_publishedAt_DESC',
+  SysPublishedVersionAsc = 'sys_publishedVersion_ASC',
+  SysPublishedVersionDesc = 'sys_publishedVersion_DESC',
+  TypeAsc = 'type_ASC',
+  TypeDesc = 'type_DESC'
 }
 
 /** To create individual blog posts [See type definition](https://app.contentful.com/spaces/msfu6cxjsfn6/content_types/pageBlogPost) */
@@ -2580,6 +2714,13 @@ export type CfNavItemNestedFilter = {
   href_not?: InputMaybe<Scalars['String']['input']>;
   href_not_contains?: InputMaybe<Scalars['String']['input']>;
   href_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  icon?: InputMaybe<Scalars['String']['input']>;
+  icon_contains?: InputMaybe<Scalars['String']['input']>;
+  icon_exists?: InputMaybe<Scalars['Boolean']['input']>;
+  icon_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  icon_not?: InputMaybe<Scalars['String']['input']>;
+  icon_not_contains?: InputMaybe<Scalars['String']['input']>;
+  icon_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   name?: InputMaybe<Scalars['String']['input']>;
   name_contains?: InputMaybe<Scalars['String']['input']>;
   name_exists?: InputMaybe<Scalars['Boolean']['input']>;
@@ -2587,7 +2728,22 @@ export type CfNavItemNestedFilter = {
   name_not?: InputMaybe<Scalars['String']['input']>;
   name_not_contains?: InputMaybe<Scalars['String']['input']>;
   name_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  shortDescription?: InputMaybe<Scalars['String']['input']>;
+  shortDescription_contains?: InputMaybe<Scalars['String']['input']>;
+  shortDescription_exists?: InputMaybe<Scalars['Boolean']['input']>;
+  shortDescription_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  shortDescription_not?: InputMaybe<Scalars['String']['input']>;
+  shortDescription_not_contains?: InputMaybe<Scalars['String']['input']>;
+  shortDescription_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  subMenuItemsCollection_exists?: InputMaybe<Scalars['Boolean']['input']>;
   sys?: InputMaybe<SysFilter>;
+  type?: InputMaybe<Scalars['String']['input']>;
+  type_contains?: InputMaybe<Scalars['String']['input']>;
+  type_exists?: InputMaybe<Scalars['Boolean']['input']>;
+  type_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  type_not?: InputMaybe<Scalars['String']['input']>;
+  type_not_contains?: InputMaybe<Scalars['String']['input']>;
+  type_not_in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type CfPageBlogPostNestedFilter = {
@@ -2675,7 +2831,7 @@ export type FooterItemGroupCollectionQuery = { __typename?: 'Query', footerItemG
 
 export type ImageFieldsFragment = { __typename: 'Asset', title?: string | null, description?: string | null, width?: number | null, height?: number | null, url?: string | null, contentType?: string | null, sys: { __typename?: 'Sys', id: string } };
 
-export type NavItemFieldsFragment = { __typename: 'NavItem', name?: string | null, href?: string | null, sys: { __typename?: 'Sys', id: string } };
+export type NavItemFieldsFragment = { __typename: 'NavItem', name?: string | null, shortDescription?: string | null, href?: string | null, type?: string | null, icon?: string | null, sys: { __typename?: 'Sys', id: string }, subMenuItemsCollection?: { __typename?: 'NavItemSubMenuItemsCollection', items: Array<{ __typename?: 'NavItem', name?: string | null, shortDescription?: string | null, href?: string | null, type?: string | null, icon?: string | null } | null> } | null };
 
 export type NavItemGroupFieldsFragment = { __typename: 'NavItemGroup', name?: string | null, sys: { __typename?: 'Sys', id: string, spaceId: string }, navItemsCollection?: { __typename: 'NavItemGroupNavItemsCollection', items: Array<(
       { __typename?: 'NavItem' }
@@ -2880,7 +3036,19 @@ export const NavItemFieldsFragmentDoc = gql`
     id
   }
   name
+  shortDescription
   href
+  type
+  icon
+  subMenuItemsCollection {
+    items {
+      name
+      shortDescription
+      href
+      type
+      icon
+    }
+  }
 }
     `;
 export const FooterItemGroupFieldsFragmentDoc = gql`

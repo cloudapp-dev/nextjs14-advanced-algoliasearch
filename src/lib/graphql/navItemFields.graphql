@@ -4,5 +4,17 @@ fragment NavItemFields on NavItem {
     id
   }
   name
+  shortDescription
   href
+  type
+  icon
+  subMenuItemsCollection {
+    items {
+      name
+      shortDescription
+      href
+      type
+      icon
+    }
+  }
 }

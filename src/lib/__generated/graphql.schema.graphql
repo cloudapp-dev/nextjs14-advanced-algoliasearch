@@ -667,8 +667,12 @@ type FooterItemGroupFooterItemsCollection {
 enum FooterItemGroupFooterItemsCollectionOrder {
   href_ASC
   href_DESC
+  icon_ASC
+  icon_DESC
   name_ASC
   name_DESC
+  shortDescription_ASC
+  shortDescription_DESC
   sys_firstPublishedAt_ASC
   sys_firstPublishedAt_DESC
   sys_id_ASC
@@ -677,6 +681,8 @@ enum FooterItemGroupFooterItemsCollectionOrder {
   sys_publishedAt_DESC
   sys_publishedVersion_ASC
   sys_publishedVersion_DESC
+  type_ASC
+  type_DESC
 }
 
 type FooterItemGroupLinkingCollections {
@@ -839,9 +845,13 @@ type NavItem implements Entry & _Node {
   _id: ID!
   contentfulMetadata: ContentfulMetadata!
   href(locale: String): String
+  icon(locale: String): String
   linkedFrom(allowedLocales: [String]): NavItemLinkingCollections
   name(locale: String): String
+  shortDescription(locale: String): String
+  subMenuItemsCollection(limit: Int = 100, locale: String, order: [NavItemSubMenuItemsCollectionOrder], preview: Boolean, skip: Int = 0, where: NavItemFilter): NavItemSubMenuItemsCollection
   sys: Sys!
+  type(locale: String): String
 }
 
 type NavItemCollection {
@@ -862,6 +872,13 @@ input NavItemFilter {
   href_not: String
   href_not_contains: String
   href_not_in: [String]
+  icon: String
+  icon_contains: String
+  icon_exists: Boolean
+  icon_in: [String]
+  icon_not: String
+  icon_not_contains: String
+  icon_not_in: [String]
   name: String
   name_contains: String
   name_exists: Boolean
@@ -869,7 +886,23 @@ input NavItemFilter {
   name_not: String
   name_not_contains: String
   name_not_in: [String]
+  shortDescription: String
+  shortDescription_contains: String
+  shortDescription_exists: Boolean
+  shortDescription_in: [String]
+  shortDescription_not: String
+  shortDescription_not_contains: String
+  shortDescription_not_in: [String]
+  subMenuItems: cfNavItemNestedFilter
+  subMenuItemsCollection_exists: Boolean
   sys: SysFilter
+  type: String
+  type_contains: String
+  type_exists: Boolean
+  type_in: [String]
+  type_not: String
+  type_not_contains: String
+  type_not_in: [String]
 }
 
 """
@@ -929,8 +962,12 @@ type NavItemGroupNavItemsCollection {
 enum NavItemGroupNavItemsCollectionOrder {
   href_ASC
   href_DESC
+  icon_ASC
+  icon_DESC
   name_ASC
   name_DESC
+  shortDescription_ASC
+  shortDescription_DESC
   sys_firstPublishedAt_ASC
   sys_firstPublishedAt_DESC
   sys_id_ASC
@@ -939,6 +976,8 @@ enum NavItemGroupNavItemsCollectionOrder {
   sys_publishedAt_DESC
   sys_publishedVersion_ASC
   sys_publishedVersion_DESC
+  type_ASC
+  type_DESC
 }
 
 enum NavItemGroupOrder {
@@ -959,6 +998,7 @@ enum NavItemGroupOrder {
 type NavItemLinkingCollections {
   entryCollection(limit: Int = 100, locale: String, preview: Boolean, skip: Int = 0): EntryCollection
   footerItemGroupCollection(limit: Int = 100, locale: String, order: [NavItemLinkingCollectionsFooterItemGroupCollectionOrder], preview: Boolean, skip: Int = 0): FooterItemGroupCollection
+  navItemCollection(limit: Int = 100, locale: String, order: [NavItemLinkingCollectionsNavItemCollectionOrder], preview: Boolean, skip: Int = 0): NavItemCollection
   navItemGroupCollection(limit: Int = 100, locale: String, order: [NavItemLinkingCollectionsNavItemGroupCollectionOrder], preview: Boolean, skip: Int = 0): NavItemGroupCollection
 }
 
@@ -973,6 +1013,27 @@ enum NavItemLinkingCollectionsFooterItemGroupCollectionOrder {
   sys_publishedAt_DESC
   sys_publishedVersion_ASC
   sys_publishedVersion_DESC
+}
+
+enum NavItemLinkingCollectionsNavItemCollectionOrder {
+  href_ASC
+  href_DESC
+  icon_ASC
+  icon_DESC
+  name_ASC
+  name_DESC
+  shortDescription_ASC
+  shortDescription_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+  type_ASC
+  type_DESC
 }
 
 enum NavItemLinkingCollectionsNavItemGroupCollectionOrder {
@@ -993,8 +1054,12 @@ enum NavItemLinkingCollectionsNavItemGroupCollectionOrder {
 enum NavItemOrder {
   href_ASC
   href_DESC
+  icon_ASC
+  icon_DESC
   name_ASC
   name_DESC
+  shortDescription_ASC
+  shortDescription_DESC
   sys_firstPublishedAt_ASC
   sys_firstPublishedAt_DESC
   sys_id_ASC
@@ -1003,6 +1068,36 @@ enum NavItemOrder {
   sys_publishedAt_DESC
   sys_publishedVersion_ASC
   sys_publishedVersion_DESC
+  type_ASC
+  type_DESC
+}
+
+type NavItemSubMenuItemsCollection {
+  items: [NavItem]!
+  limit: Int!
+  skip: Int!
+  total: Int!
+}
+
+enum NavItemSubMenuItemsCollectionOrder {
+  href_ASC
+  href_DESC
+  icon_ASC
+  icon_DESC
+  name_ASC
+  name_DESC
+  shortDescription_ASC
+  shortDescription_DESC
+  sys_firstPublishedAt_ASC
+  sys_firstPublishedAt_DESC
+  sys_id_ASC
+  sys_id_DESC
+  sys_publishedAt_ASC
+  sys_publishedAt_DESC
+  sys_publishedVersion_ASC
+  sys_publishedVersion_DESC
+  type_ASC
+  type_DESC
 }
 
 """
@@ -1693,6 +1788,13 @@ input cfNavItemNestedFilter {
   href_not: String
   href_not_contains: String
   href_not_in: [String]
+  icon: String
+  icon_contains: String
+  icon_exists: Boolean
+  icon_in: [String]
+  icon_not: String
+  icon_not_contains: String
+  icon_not_in: [String]
   name: String
   name_contains: String
   name_exists: Boolean
@@ -1700,7 +1802,22 @@ input cfNavItemNestedFilter {
   name_not: String
   name_not_contains: String
   name_not_in: [String]
+  shortDescription: String
+  shortDescription_contains: String
+  shortDescription_exists: Boolean
+  shortDescription_in: [String]
+  shortDescription_not: String
+  shortDescription_not_contains: String
+  shortDescription_not_in: [String]
+  subMenuItemsCollection_exists: Boolean
   sys: SysFilter
+  type: String
+  type_contains: String
+  type_exists: Boolean
+  type_in: [String]
+  type_not: String
+  type_not_contains: String
+  type_not_in: [String]
 }
 
 input cfPageBlogPostNestedFilter {
