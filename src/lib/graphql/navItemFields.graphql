@@ -1,0 +1,20 @@
+fragment NavItemFields on NavItem {
+  __typename
+  sys {
+    id
+  }
+  name
+  shortDescription
+  href
+  type
+  icon
+  subMenuItemsCollection {
+    items {
+      name
+      shortDescription
+      href
+      type
+      icon
+    }
+  }
+}
