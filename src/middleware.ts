@@ -1,79 +1,11 @@
 import { NextResponse } from "next/server";
 import type { NextFetchEvent, NextRequest } from "next/server";
 import { fallbackLng, locales } from "@/app/i18n/settings";
-import { Kafka } from "@upstash/kafka";
-
-const apikey = process.env.API_KEY;
-
-const kafka = new Kafka({
-  url: process.env.KAFKA_URL || "",
-  username: process.env.KAFKA_USERNAME || "",
-  password: process.env.KAFKA_PASSWORD || "",
-});
-
-// Pushing tracking Info direct to Postgres
-
-// async function sendToPrisma(message: any) {
-//   await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/tracking`, {
-//     method: "POST",
-//     body: JSON.stringify(message),
-//     headers: new Headers({
-//       "Content-Type": "application/json" || "",
-//       "x-api-key": apikey || "",
-//     }),
-//   });
-// }
 
 export async function middleware(request: NextRequest, event: NextFetchEvent) {
-  //Middleware to track user data
+  const { pathname, search } = request.nextUrl;
 
-  // Getting Tracking Data for direct Postgres
-
-  // const message = {
-  //   country: request.geo?.country,
-  //   city: request.geo?.city,
-  //   region: request.geo?.region,
-  //   pathname: request.nextUrl.pathname,
-  //   url: request.url,
-  //   ip: ip,
-  //   nexturl: request.headers.get("next-url"),
-  //   mobile: request.headers.get("sec-ch-ua-mobile"),
-  //   platform: request.headers.get("sec-ch-ua-platform"),
-  //   useragent: request.headers.get("user-agent"),
-  //   referer: request.headers.get("referer"),
-  // };
-
-  // sendToPrisma(message);
-
-  const newDate = new Date();
-  newDate.setHours(newDate.getHours() + 2);
-
-  const messagekafka = {
-    country: request.geo?.country,
-    city: request.geo?.city,
-    region: request.geo?.region,
-    pathname: request.nextUrl.pathname,
-    url: request.url,
-    ip: request.headers.get("x-real-ip"),
-    exip: request.ip,
-    nexturl: request.headers.get("next-url"),
-    mobile: request.headers.get("sec-ch-ua-mobile"),
-    platform: request.headers.get("sec-ch-ua-platform"),
-    useragent: request.headers.get("user-agent"),
-    referer: request.headers.get("referer"),
-    fetchsite: request.headers.get("sec-fetch-site"),
-    created_at: newDate.toISOString(),
-  };
-
-  const p = kafka.producer();
-  const topic = "tracking";
-
-  event.waitUntil(p.produce(topic, JSON.stringify(messagekafka)));
-
-  // Check if there is any supported locale in the pathname
-  const pathname = request.nextUrl.pathname;
-
-  // Check if the default locale is in the pathname
+  //Entfernt den FallbackLng aus dem Pathname, sofern dieser vorhanden ist
   if (
     pathname.startsWith(`/${fallbackLng}/`) ||
     pathname === `/${fallbackLng}`
@@ -95,6 +27,7 @@ export async function middleware(request: NextRequest, event: NextFetchEvent) {
     (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
   );
 
+  // Füght den FallbackLng vor den Pathname ein, sofern keine Sprache im Pathname vorhanden ist
   if (pathnameIsMissingLocale) {
     const RewriteUrl = request.nextUrl;
     RewriteUrl.pathname = `/${fallbackLng}${pathname}`;

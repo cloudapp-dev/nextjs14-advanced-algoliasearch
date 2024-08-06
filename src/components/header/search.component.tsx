@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter, usePathname, useParams } from "next/navigation";
 import type { LocaleTypes } from "@/app/i18n/settings";
+import { fallbackLng } from "@/app/i18n/settings";
 import { useTranslation } from "@/app/i18n/client";
 
 export default function SearchBar({
@@ -23,8 +24,6 @@ export default function SearchBar({
   pathArray.shift();
   pathArray = pathArray.filter((path) => path !== "");
 
-  // console.log("path", pathArray[0]);
-
   // if the path is searchalgolia, don't show the search bar
   if (pathArray[0] === "searchalgolia") {
     return null;
@@ -32,8 +31,17 @@ export default function SearchBar({
 
   function handleSubmit(e: any) {
     e.preventDefault(); // prevent page refresh
-    if (!search) return; //
-    router.push(`/${locale}/search/${search}`); // push to the search page
+    if (!search) return; // if there is no search, return
+    const searchParams = `example_dev[query]`;
+    if (locale === fallbackLng) {
+      router.push(
+        `/searchalgolia?${encodeURIComponent(searchParams)}=${search}`
+      );
+    } else {
+      router.push(
+        `/${locale}/searchalgolia?${encodeURIComponent(searchParams)}=${search}`
+      );
+    }
   }
 
   return (

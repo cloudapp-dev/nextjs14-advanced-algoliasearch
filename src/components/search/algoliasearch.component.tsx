@@ -2,7 +2,6 @@
 
 import algoliasearch from "algoliasearch/lite";
 import { Hit as AlgoliaHit } from "instantsearch.js";
-import Link from "next/link";
 import {
   Hits,
   Highlight,
@@ -11,12 +10,12 @@ import {
   DynamicWidgets,
   Snippet,
 } from "react-instantsearch";
-import NextImage, { ImageProps as NextImageProps } from "next/image";
 import { PageBlogPostFieldsFragment } from "@/lib/__generated/sdk";
 import { InstantSearchNext } from "react-instantsearch-nextjs";
 import { Panel } from "@/components/search/panel.component";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import type { LocaleTypes } from "@/app/i18n/settings";
+import CardAlgolia from "./cardalgolia.component";
 
 interface ArticleAuthorProps {
   article: PageBlogPostFieldsFragment;
@@ -27,18 +26,15 @@ const client = algoliasearch(
   process.env.NEXT_PUBLIC_ALGOLIA_API_KEY || ""
 );
 
-type HitProps = {
+type CardProps = {
   hit: AlgoliaHit<{
     intName: string;
-    title_de: string;
-    title_en: string;
-    shortDescription_de: string;
-    shortDescription_en: string;
     image: string;
-    pubdate: string;
+    pubdate: Date;
+    slug: string;
     width: number;
     height: number;
-    slug: string;
+    tags: string[];
     lang: {
       "de-DE": { content: string; shortDescription: string; title: string };
       "en-US": { content: string; shortDescription: string; title: string };
@@ -47,44 +43,28 @@ type HitProps = {
 };
 
 let locale: LocaleTypes;
-let shortDesc: string;
 
-function Hit({ hit }: HitProps) {
+function Hit({ hit }: CardProps) {
   const blurURL = new URL(hit.image);
   blurURL.searchParams.set("w", "10");
 
-  shortDesc = hit.lang[locale].title;
-
   return (
-    <article>
-      <Link href={`/${locale}/${hit.slug}`}>
-        <h2>
-          <Highlight
-            attribute="intName"
-            hit={hit}
-            className="Hit-label text-black"
-          />
-        </h2>
-        {hit?.image && (
-          <NextImage
-            src={hit.image}
-            width={300}
-            height={300}
-            alt={hit.intName || ""}
-            sizes="(max-width: 1200px) 100vw, 50vw"
-            placeholder="blur"
-            blurDataURL={blurURL.toString()}
-          />
-        )}
-
-        <span className="text-sm text-gray-500 mr-2">{shortDesc}</span>
-        <Snippet hit={hit} attribute="pubdate" />
-      </Link>
-    </article>
+    <div>
+      <CardAlgolia key={hit.objectID} result={hit} />
+    </div>
   );
 }
 
 export default function Search() {
+  // const searchParams = useSearchParams();
+  // const query = searchParams.get("example_dev[query]") || "";
+  // console.log("query", query);
+
+  const urlSearchParams = useSearchParams();
+  const params = Object.fromEntries(urlSearchParams.entries());
+
+  console.log("params_searchompo", params);
+
   locale = useParams()?.locale as LocaleTypes;
   return (
     <InstantSearchNext
@@ -110,8 +90,13 @@ export default function Search() {
           <DynamicWidgets fallbackComponent={FallbackComponent} />
         </div>
         <div>
-          <SearchBox />
-          <Hits hitComponent={Hit} />
+          <SearchBox className="p-3 shadow-sm" />
+          <Hits
+            hitComponent={Hit}
+            classNames={{
+              root: "MyCustomHits",
+            }}
+          />
         </div>
       </div>
     </InstantSearchNext>
@@ -121,7 +106,15 @@ export default function Search() {
 function FallbackComponent({ attribute }: { attribute: string }) {
   return (
     <Panel header={attribute}>
-      <RefinementList attribute={attribute} />
+      <RefinementList
+        classNames={{
+          root: "MyCustomRefinementList",
+        }}
+        attribute={attribute}
+        limit={8}
+        showMore={true}
+        showMoreLimit={20}
+      />
     </Panel>
   );
 }
