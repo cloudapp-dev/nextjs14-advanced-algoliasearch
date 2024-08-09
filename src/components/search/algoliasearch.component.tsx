@@ -63,8 +63,6 @@ export default function Search() {
   const urlSearchParams = useSearchParams();
   const params = Object.fromEntries(urlSearchParams.entries());
 
-  console.log("params_searchompo", params);
-
   locale = useParams()?.locale as LocaleTypes;
   return (
     <InstantSearchNext

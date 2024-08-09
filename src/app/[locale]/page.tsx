@@ -261,15 +261,6 @@ async function Home({ params }: PageProps) {
           source="loadmore"
           locale={params.locale.toString()}
         />
-
-        {/* SitemapCounter */}
-        {/* <Sitemapcounter /> */}
-        {/* SitemapChecker */}
-        {/* <SitemapChecker /> */}
-        {/* WordCount */}
-        {/* <WordCount /> */}
-        {/* Slugify */}
-        {/* <Slugify /> */}
       </Container>
     </>
   );

@@ -6,9 +6,9 @@ import {
 import { BLOCKS, MARKS, Document, INLINES } from "@contentful/rich-text-types";
 import { ArticleImage } from "@/components/contentful/ArticleImage.component";
 import { ComponentRichImage, NavItem } from "@/lib/__generated/sdk";
-import { CopyButton } from "@/components/contentful/ArticleCodeCopy";
 import { Toc } from "@/components/contentful/ArticleToc";
 import { ArticleTocItem } from "@/components/contentful/ArticleTocItem";
+import { ArticleH3Item } from "@/components/contentful/ArticleH3Item";
 import { CtfPicture } from "@/components/contentful/CtfPicture.component";
 import { twMerge } from "tailwind-merge";
 import Link from "next/link";
@@ -27,10 +27,6 @@ export interface ContentfulRichTextInterface {
       }
     | any;
   source: string;
-}
-
-function getFileName(text: string) {
-  return text.split("#");
 }
 
 export const EmbeddedEntry = (entry: EmbeddedEntryType) => {
@@ -59,33 +55,10 @@ export const contentfulBaseRichTextOptions = ({
       return <b key={`${text}-key`}>{text}</b>;
     },
     [MARKS.CODE]: (text: any) => {
-      let markedfilename = undefined;
       let showCodeText = text.toString() || "";
-      const filename = getFileName(text.toString())[1];
-      if (filename) {
-        markedfilename = "#" + filename + "#";
-        showCodeText = text.toString().replace(markedfilename, "");
-        showCodeText = showCodeText.replace("##", "");
-      }
       return (
         <>
           <SyntaxHighlightPost code={showCodeText} lang="typescript" />
-
-          {/* <pre>
-            <div className="mb-3">
-              {" "}
-              <CopyButton text={text} />
-            </div>
-            <code key={`${text}-key`}>
-              {markedfilename && (
-                <span className="inline-block px-1 py-1 text-base text-white bg-[#3c4f6a] rounded-lg">
-                  {markedfilename}
-                </span>
-              )}
-              {showCodeText}
-           
-            </code>
-          </pre> */}
         </>
       );
     },
@@ -113,7 +86,22 @@ export const contentfulBaseRichTextOptions = ({
     [BLOCKS.HEADING_2]: (node, children: any) => {
       return <ArticleTocItem dynamicId={children[0]} heading={children[0]} />;
     },
-
+    [BLOCKS.HEADING_3]: (node, children: any) => {
+      return <ArticleH3Item heading={children} />;
+    },
+    [BLOCKS.PARAGRAPH]: (node, children) => {
+      //Entfernen des <p> Tags bei Codeelementen im Frontend
+      const markLength = node.content[0].marks.length;
+      let paragraph_type = "";
+      if (markLength > 0) {
+        paragraph_type = node.content[0].marks[0].type;
+      }
+      if (paragraph_type === "code") {
+        return <div>{children}</div>;
+      } else {
+        return <p>{children}</p>;
+      }
+    },
     [BLOCKS.EMBEDDED_ENTRY]: (node) => {
       const entry = links?.entries?.block?.find(
         (item: EmbeddedEntryType) => item?.sys?.id === node.data.target.sys.id
@@ -127,25 +115,36 @@ export const contentfulBaseRichTextOptions = ({
       const asset = links?.assets?.block?.find(
         (item: any) => item?.sys?.id === node.data.target.sys.id
       );
+      const assetType = asset.contentType;
       if (!asset) return null;
-      return (
-        <>
-          <figure>
-            <div className="flex justify-center">
-              <CtfPicture
-                nextImageProps={{
-                  className: twMerge(
-                    "mt-0 mb-0 ",
-                    "rounded-2xl border border-gray-300 shadow-lg"
-                  ),
-                }}
-                {...asset}
-              />
-              ;
-            </div>
-          </figure>
-        </>
-      );
+      switch (assetType) {
+        case "video/mp4":
+          return (
+            <video width="100%" height="100%" controls>
+              <source src={asset.url} type="video/mp4" />
+            </video>
+          );
+        default:
+          return (
+            <>
+              <figure>
+                <div className="flex justify-center">
+                  <CtfPicture
+                    nextImageProps={{
+                      className: twMerge(
+                        "mt-0 mb-0 ",
+                        "shadow-lg dark:shadow-white dark:shadow-sm-light"
+                      ),
+                      priority: false,
+                    }}
+                    {...asset}
+                  />
+                  ;
+                </div>
+              </figure>
+            </>
+          );
+      }
     },
   },
 });
@@ -166,6 +165,7 @@ export const CtfRichText = ({
       headings.push(headingvalue);
     }
   });
+
   return (
     <article className="prose prose-lg max-w-none">
       {source === "article" && <Toc headings={headings} />}

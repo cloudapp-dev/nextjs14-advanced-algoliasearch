@@ -17,7 +17,7 @@ import { TagCloudSimpleHome } from "@/components/search/tagcloudsimpleHome.compo
 // Claps
 import ClapButton from "@/components/contentful/ClapButton.component";
 // ViewCount
-import { ReportView } from "@/components/analytics/viewcount";
+// import { ReportView } from "@/components/analytics/viewcount";
 import redis from "../../../lib/redis";
 // Social Sharing
 import SocialSharing from "@/components/sharing/socialsharing.component";
@@ -32,11 +32,11 @@ interface BlogPostPageProps {
   params: BlogPostPageParams;
 }
 
-type ViewCountProps = {
-  params: {
-    slug: string;
-  };
-};
+// type ViewCountProps = {
+//   params: {
+//     slug: string;
+//   };
+// };
 
 // Tell Next.js about all our blog posts so
 // they can be statically generated at build time.
@@ -222,14 +222,14 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
     datanew = searchFacets.datanew;
   }
 
-  const views =
-    (await redis.get<number>(
-      [
-        "pageviews",
-        "example",
-        params.locale.toString() + "/" + blogPost.slug,
-      ].join(":")
-    )) ?? 0;
+  // const views =
+  //   (await redis.get<number>(
+  //     [
+  //       "pageviews",
+  //       "example",
+  //       params.locale.toString() + "/" + blogPost.slug,
+  //     ].join(":")
+  //   )) ?? 0;
 
   return (
     <>
@@ -243,7 +243,7 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
         />
       )}
       <div className="mt-4" />
-      <ReportView slug={params.locale.toString() + "/" + blogPost.slug || ""} />
+      {/* <ReportView slug={params.locale.toString() + "/" + blogPost.slug || ""} /> */}
       <Container>
         <ArticleHero
           article={blogPost}
@@ -263,11 +263,11 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
           />
         )}
         <div className="mt-4" />
-        <SocialSharing
+        {/* <SocialSharing
           slug={params.locale.toString() + "/" + blogPost.slug || ""}
           title={blogPost.title || ""}
           locale={params.locale.toString()}
-        />
+        /> */}
         <div className="mt-4" />
         {/* <SocialSharingLite
           slug={params.locale.toString() + "/" + blogPost.slug || ""}
@@ -289,14 +289,15 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
             slug=""
             source="relatedposts"
             locale={params.locale.toString()}
+            postCount={relatedPosts.length}
           />
         </Container>
       )}
       <Container className="max-w-5xl mt-8">
         <ClapButton slug={blogPost.slug || ""} />
-        <div className="text-base p-2 dark:bg-gray-500 rounded-lg dark:text-white bg-gray-200 text-gray-600 w-24 mt-4">
+        {/* <div className="text-base p-2 dark:bg-gray-500 rounded-lg dark:text-white bg-gray-200 text-gray-600 w-24 mt-4">
           Views: {views}
-        </div>
+        </div> */}
       </Container>
     </>
   );

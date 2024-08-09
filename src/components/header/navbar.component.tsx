@@ -52,6 +52,7 @@ export default function Navbar({ menuItems, logourl }: any) {
   const pathname = usePathname();
   const currentRoute = pathname;
   const { t } = useTranslation(locale, "common");
+  const sitename: string = process.env.NEXT_PUBLIC_SITE_NAME || "";
 
   // Authentication
   const SIGN_OUT_URL = `https://${process.env.NEXT_PUBLIC_AZURE_AD_B2C_TENANT_NAME}.b2clogin.com/${process.env.NEXT_PUBLIC_AZURE_AD_B2C_TENANT_NAME}.onmicrosoft.com/${process.env.NEXT_PUBLIC_AZURE_AD_B2C_PRIMARY_USER_FLOW}/oauth2/v2.0/logout?post_logout_redirect_uri=${process.env.NEXT_PUBLIC_POST_LOGOUT_REDIRECT_URI}/${locale}`;
@@ -195,17 +196,19 @@ export default function Navbar({ menuItems, logourl }: any) {
           <div className="flex flex-wrap items-center justify-between mx-auto">
             <Link className="flex items-center" href={`/${locale}/`}>
               <Image
-                className="block float-left w-auto h-12 lg:hidden dark:bg-blue-100"
+                // className="block float-left w-auto h-12 lg:hidden dark:bg-blue-100"
+                className="block float-left w-auto h-12 lg:hidden"
                 src={logourl ? logourl : "/images/svgrepo-com.svg"}
-                alt="Testblog"
+                alt={sitename}
                 width={48}
                 height={48}
               />
 
               <Image
-                className="hidden float-left w-auto h-12 lg:block dark:bg-blue-100"
+                // className="hidden float-left w-auto h-12 lg:block dark:bg-blue-100"
+                className="hidden float-left w-auto h-12 lg:block"
                 src={logourl ? logourl : "/images/svgrepo-com.svg"}
-                alt="Testblog"
+                alt={sitename}
                 width={48}
                 height={48}
               />

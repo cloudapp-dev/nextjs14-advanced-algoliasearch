@@ -17,6 +17,17 @@ export const CtfPicture = ({
 }: ImageProps) => {
   if (!url || !width || !height) return null;
 
+  // let sizeProps = "(max-width: 1200px) 100vw, 50vw";
+  // if (nextImageProps?.className === "w-full") {
+  //   sizeProps = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw";
+  // }
+
+  // if (
+  //   nextImageProps?.className === "mt-0 mb-0 shadow-lg dark:shadow-sm-light"
+  // ) {
+  //   const heightnew = height;
+  // }
+
   // common option
   const common_high = {
     alt: title || "",
@@ -25,6 +36,9 @@ export const CtfPicture = ({
     priority: nextImageProps?.priority,
     className: twMerge(nextImageProps?.className, "transition-all"),
   };
+
+  // width: 800,
+  // height: 500,
   const common_medium = {
     alt: title || "",
     width: 800,
@@ -32,6 +46,8 @@ export const CtfPicture = ({
     className: twMerge(nextImageProps?.className, "transition-all"),
   };
 
+  // width: 300,
+  // height: 200,
   const common_low = {
     alt: title || "",
     width: 300,
@@ -64,13 +80,20 @@ export const CtfPicture = ({
     priority: nextImageProps?.priority,
   });
 
+  // console.log("rest", rest);
+
   return (
     <picture>
-      <source media="(max-width: 740px)" srcSet={low} />
-      <source media="(max-width: 980px)" srcSet={low} />
-      <source media="(min-width: 1280px)" srcSet={medium} />
       <source media="(min-width: 1480px)" srcSet={high} />
+      <source media="(min-width: 1280px)" srcSet={medium} />
+      <source media="(max-width: 980px)" srcSet={low} />
+      <source media="(max-width: 740px)" srcSet={low} />
+      {/* //Fallback */}
       <img alt={title || ""} {...rest} />
+      {nextImageProps?.className ===
+        "mt-0 mb-0 shadow-lg dark:shadow-sm-light" && (
+        <figcaption className="mt-4">{title || ""}</figcaption>
+      )}
     </picture>
   );
 };

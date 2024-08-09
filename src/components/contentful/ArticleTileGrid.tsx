@@ -4,15 +4,14 @@ import { twMerge } from "tailwind-merge";
 import { ArticleTile } from "@/components/contentful/ArticleTile";
 import { PageBlogPostFieldsFragment } from "@/lib/__generated/sdk";
 
-import { useInView } from "react-intersection-observer";
+// import { useInView } from "react-intersection-observer";
 import { useState, useEffect } from "react";
 import { getPosts } from "@/actions/getPosts";
-
-import { useSearchParams } from "next/navigation";
+import { Button } from "@tremor/react";
 
 interface ArticleTileGridProps extends HTMLProps<HTMLDivElement> {
   articles?: Array<PageBlogPostFieldsFragment | null>;
-  postCount?: number;
+  postCount?: number | null;
   slug: string | null | undefined;
   locale: string;
   source: string;
@@ -32,7 +31,7 @@ export default function ArticleTileGrid({
   const [offset, setOffset] = useState(NUMBER_OF_USERS_TO_FETCH);
   const [posts, setPosts] = useState<any>(articles);
   // Infinte scroll
-  const { ref, inView } = useInView();
+  // const { ref, inView } = useInView();
 
   const loadMorePosts = async () => {
     const apiPosts = await getPosts(
@@ -48,13 +47,15 @@ export default function ArticleTileGrid({
     setOffset(offset + NUMBER_OF_USERS_TO_FETCH);
   };
 
+  // console.log("posts", postCount);
+
   //Infinte scroll
-  useEffect(() => {
-    if (inView) {
-      loadMorePosts();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inView]);
+  // useEffect(() => {
+  //   if (inView) {
+  //     loadMorePosts();
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [inView]);
 
   return posts && posts.length > 0 ? (
     <>
@@ -71,24 +72,24 @@ export default function ArticleTileGrid({
       </div>
       {/* Infinite Scroll */}
       {/* <div ref={ref}>Loading...</div> */}
-      <div ref={ref}></div>
+      {/* <div ref={ref}></div> */}
 
       {/* Load More Button */}
-      {/* {source !== "relatedposts" && (
+      {source !== "relatedposts" && (
         <>
           <div className="flex flex-col items-center">
             <Button
               onClick={loadMorePosts}
-              disabled={currentPage > 0 || offset >= totalPages}
+              disabled={offset >= (postCount ?? 0)}
               size="lg"
               className="mt-4 sm:flex sm:max-w-md"
             >
               Load more
             </Button>
           </div>
-          {source !== "tag" && <Pagination totalPages={totalPages} />}
+          {/* {source !== "tag" && <Pagination totalPages={totalPages} />} */}
         </>
-      )} */}
+      )}
     </>
   ) : null;
 }
