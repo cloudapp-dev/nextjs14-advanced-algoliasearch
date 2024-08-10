@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { documentToPlainTextString } from "@contentful/rich-text-plain-text-renderer";
 import { client } from "@/lib/client";
 import { fallbackLng, locales } from "@/app/i18n/settings";
+import { title } from "process";
 
 const apikey = process.env.API_KEY;
 
@@ -84,6 +85,12 @@ export async function POST(request: NextRequest) {
     width: blogPost?.featuredImage?.width?.toString() || "0",
     image: blogPost?.featuredImage?.url,
     intName: document.intName,
+    lang_de: json_de,
+    lang_en: json_en,
+    short_de: document.shortDescription_de,
+    short_en: document.shortDescription_en,
+    title_de: document.title_de,
+    title_en: document.title_en,
     lang: {
       "de-DE": {
         content: json_de,

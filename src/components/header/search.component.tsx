@@ -32,7 +32,7 @@ export default function SearchBar({
   function handleSubmit(e: any) {
     e.preventDefault(); // prevent page refresh
     if (!search) return; // if there is no search, return
-    const searchParams = `example_dev[query]`;
+    const searchParams = `${process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME}[query]`;
     if (locale === fallbackLng) {
       router.push(
         `/searchalgolia?${encodeURIComponent(searchParams)}=${search}`

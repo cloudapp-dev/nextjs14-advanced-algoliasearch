@@ -4,11 +4,9 @@ import algoliasearch from "algoliasearch/lite";
 import { Hit as AlgoliaHit } from "instantsearch.js";
 import {
   Hits,
-  Highlight,
   SearchBox,
   RefinementList,
   DynamicWidgets,
-  Snippet,
 } from "react-instantsearch";
 import { PageBlogPostFieldsFragment } from "@/lib/__generated/sdk";
 import { InstantSearchNext } from "react-instantsearch-nextjs";
@@ -56,10 +54,6 @@ function Hit({ hit }: CardProps) {
 }
 
 export default function Search() {
-  // const searchParams = useSearchParams();
-  // const query = searchParams.get("example_dev[query]") || "";
-  // console.log("query", query);
-
   const urlSearchParams = useSearchParams();
   const params = Object.fromEntries(urlSearchParams.entries());
 

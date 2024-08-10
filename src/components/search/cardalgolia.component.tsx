@@ -7,9 +7,11 @@ import { useParams } from "next/navigation";
 import type { LocaleTypes } from "@/app/i18n/settings";
 import { twMerge } from "tailwind-merge";
 import { ArticleLabel } from "@/components/contentful/ArticleLabel";
+import { Hit as AlgoliaHit } from "instantsearch.js";
+import { Highlight, Snippet } from "react-instantsearch";
 
-interface CardProps {
-  result: {
+type CardProps = {
+  result: AlgoliaHit<{
     intName: string;
     image: string;
     pubdate: Date;
@@ -21,8 +23,8 @@ interface CardProps {
       "de-DE": { content: string; shortDescription: string; title: string };
       "en-US": { content: string; shortDescription: string; title: string };
     };
-  };
-}
+  }>;
+};
 
 interface LangProps {
   title: string;
@@ -68,13 +70,16 @@ export default function CardAlgolia({ result }: CardProps) {
           {langresult.title && (
             <Link href={`/${locale}/${result.slug}`}>
               <p className="mb-2 h3 line-clamp-2 text-gray-800 dark:text-[#AEC1CC] md:mb-3">
-                {langresult.title}
+                {/* {langresult.title} */}
+                <Highlight attribute="intName" hit={result} />
               </p>
             </Link>
           )}
+
           {langresult.shortDescription && (
             <p className="mt-2 text-base line-clamp-2">
-              {langresult.shortDescription}
+              {/* {langresult.shortDescription} */}
+              <Snippet attribute="intName" hit={result} />
             </p>
           )}
 
