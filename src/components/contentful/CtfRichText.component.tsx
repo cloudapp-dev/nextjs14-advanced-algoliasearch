@@ -91,13 +91,16 @@ export const contentfulBaseRichTextOptions = ({
     },
     [BLOCKS.PARAGRAPH]: (node, children) => {
       //Entfernen des <p> Tags bei Codeelementen im Frontend
-      const markLength = node.content[0].marks.length;
-      let paragraph_type = "";
-      if (markLength > 0) {
-        paragraph_type = node.content[0].marks[0].type;
-      }
-      if (paragraph_type === "code") {
-        return <div>{children}</div>;
+      const markValue: any = node.content[0];
+      let markLength: number = 0;
+      if (markValue.hasOwnProperty("marks")) {
+        markLength = markValue.marks.length || 0;
+        if (markLength > 0) {
+          const paragraph_type = markValue.marks[0].type;
+          if (paragraph_type === "code") {
+            return <div>{children}</div>;
+          }
+        }
       } else {
         return <p>{children}</p>;
       }
