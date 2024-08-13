@@ -20,8 +20,8 @@ import ClapButton from "@/components/contentful/ClapButton.component";
 // import { ReportView } from "@/components/analytics/viewcount";
 import redis from "../../../lib/redis";
 // Social Sharing
-import SocialSharing from "@/components/sharing/socialsharing.component";
-import SocialSharingLite from "@/components/sharing/socialsharinglite.component";
+// import SocialSharing from "@/components/sharing/socialsharing.component";
+// import SocialSharingLite from "@/components/sharing/socialsharinglite.component";
 
 interface BlogPostPageParams {
   slug: string;

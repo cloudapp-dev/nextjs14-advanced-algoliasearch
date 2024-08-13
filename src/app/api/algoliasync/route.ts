@@ -44,8 +44,6 @@ export async function POST(request: NextRequest) {
     if (tag) tagsnew.push(tag.id);
   });
 
-  // console.log("tagsnew", tagsnew);
-
   const blogPagedata_de = await client.pageBlogPost({
     locale: "de-DE",
     preview: false,
@@ -65,48 +63,46 @@ export async function POST(request: NextRequest) {
   }
   json_de = documentToPlainTextString(blogPost_de.content?.json);
 
-  // console.log("blogPost", blogPost.content?.json);
-
   const AlgoliaUrl =
     "https://" +
     process.env.NEXT_PUBLIC_ALGOLIA_APP_ID +
     ".algolia.net/1/indexes/" +
     process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME +
     "/" +
-    document.entityId;
+    blogPost.sys.id;
 
   const date = blogPost.publishedDate;
   const formatDate = new Date(date).toISOString().substring(0, 10);
   const timeStamp = new Date(date).getTime() / 1000;
 
   const jsonData: any = {
-    entityId: document.entityId,
+    entityId: blogPost.sys.id,
     height: blogPost?.featuredImage?.height?.toString() || "0",
     width: blogPost?.featuredImage?.width?.toString() || "0",
     image: blogPost?.featuredImage?.url,
-    intName: document.intName,
+    intName: blogPost.internalName,
     lang_de: json_de,
     lang_en: json_en,
-    short_de: document.shortDescription_de,
-    short_en: document.shortDescription_en,
-    title_de: document.title_de,
-    title_en: document.title_en,
-    lang: {
-      "de-DE": {
-        content: json_de,
-        shortDescription: document.shortDescription_de,
-        title: document.title_de,
-      },
-      "en-US": {
-        content: json_en,
-        shortDescription: document.shortDescription_en,
-        title: document.title_en,
-      },
-    },
+    short_de: blogPost_de.shortDescription,
+    short_en: blogPost.shortDescription,
+    title_de: blogPost_de.title,
+    title_en: blogPost.title,
+    // lang: {
+    //   "de-DE": {
+    //     content: json_de,
+    //     shortDescription: document.shortDescription_de,
+    //     title: document.title_de,
+    //   },
+    //   "en-US": {
+    //     content: json_en,
+    //     shortDescription: document.shortDescription_en,
+    //     title: document.title_en,
+    //   },
+    // },
     pubdate: formatDate,
     pubdatetimestamp: timeStamp,
     slug: document.slug,
-    spaceId: document.spaceId,
+    spaceId: blogPost.sys.spaceId,
     tags: tagsnew,
   };
 
@@ -136,7 +132,7 @@ export async function POST(request: NextRequest) {
   // console.log("result", result);
 
   return NextResponse.json(
-    { transformed: true, date: Date.now() },
+    { transformed: true, date: Date.now(), slug: document.slug },
     { status: 200 }
   );
 }

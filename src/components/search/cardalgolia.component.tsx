@@ -9,6 +9,7 @@ import { twMerge } from "tailwind-merge";
 import { ArticleLabel } from "@/components/contentful/ArticleLabel";
 import { Hit as AlgoliaHit } from "instantsearch.js";
 import { Highlight, Snippet } from "react-instantsearch";
+import { fallbackLng } from "@/app/i18n/settings";
 
 type CardProps = {
   result: AlgoliaHit<{
@@ -19,25 +20,31 @@ type CardProps = {
     width: number;
     height: number;
     tags: string[];
-    lang: {
-      "de-DE": { content: string; shortDescription: string; title: string };
-      "en-US": { content: string; shortDescription: string; title: string };
-    };
+    lang_de: string;
+    lang_en: string;
+    short_de: string;
+    short_en: string;
+    title_de: string;
+    title_en: string;
+    // lang: {
+    //   "de-DE": { content: string; shortDescription: string; title: string };
+    //   "en-US": { content: string; shortDescription: string; title: string };
+    // };
   }>;
 };
 
-interface LangProps {
-  title: string;
-  content: string;
-  shortDescription: string;
-}
+// interface LangProps {
+//   title: string;
+//   content: string;
+//   shortDescription: string;
+// }
 
 export default function CardAlgolia({ result }: CardProps) {
   const locale = useParams()?.locale as LocaleTypes;
-  const langNr = locale === "de-DE" ? 0 : 1;
-  const langresult = JSON.parse(
-    JSON.stringify(Object.entries(result.lang)[langNr][1])
-  ) as LangProps;
+  // const langNr = locale === "de-DE" ? 0 : 1;
+  // const langresult = JSON.parse(
+  //   JSON.stringify(Object.entries(result.lang)[langNr][1])
+  // ) as LangProps;
 
   const className = "md:grid-cols-2 lg:grid-cols-3";
   const classNameImage = "object-cover aspect-[16/10] w-full";
@@ -62,24 +69,34 @@ export default function CardAlgolia({ result }: CardProps) {
             sizes="(max-width: 1200px) 100vw, 50vw"
             placeholder="blur"
             blurDataURL={blurURL.toString()}
-            alt={langresult.title || ""}
+            alt={
+              (locale == fallbackLng ? result.title_en : result.title_de) || ""
+            }
             className={twMerge(classNameImage, "transition-all")}
           ></Image>
         </Link>
         <div className="flex flex-col flex-1 px-4 py-3 dark:bg-gray-800 md:px-5 md:py-4 lg:px-7 lg:py-5">
-          {langresult.title && (
+          {locale === fallbackLng ? (
             <Link href={`/${locale}/${result.slug}`}>
               <p className="mb-2 h3 line-clamp-2 text-gray-800 dark:text-[#AEC1CC] md:mb-3">
-                {/* {langresult.title} */}
-                <Highlight attribute="intName" hit={result} />
+                <Highlight attribute="title_en" hit={result} />
+              </p>
+            </Link>
+          ) : (
+            <Link href={`/${locale}/${result.slug}`}>
+              <p className="mb-2 h3 line-clamp-2 text-gray-800 dark:text-[#AEC1CC] md:mb-3">
+                <Highlight attribute="title_de" hit={result} />
               </p>
             </Link>
           )}
 
-          {langresult.shortDescription && (
+          {locale === fallbackLng ? (
             <p className="mt-2 text-base line-clamp-2">
-              {/* {langresult.shortDescription} */}
-              <Snippet attribute="intName" hit={result} />
+              <Snippet attribute="short_en" hit={result} />
+            </p>
+          ) : (
+            <p className="mt-2 text-base line-clamp-2">
+              <Snippet attribute="short_de" hit={result} />
             </p>
           )}
 

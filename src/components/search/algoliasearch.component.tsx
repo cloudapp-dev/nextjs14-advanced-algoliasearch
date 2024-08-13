@@ -33,10 +33,16 @@ type CardProps = {
     width: number;
     height: number;
     tags: string[];
-    lang: {
-      "de-DE": { content: string; shortDescription: string; title: string };
-      "en-US": { content: string; shortDescription: string; title: string };
-    };
+    lang_de: string;
+    lang_en: string;
+    short_de: string;
+    short_en: string;
+    title_de: string;
+    title_en: string;
+    // lang: {
+    //   "de-DE": { content: string; shortDescription: string; title: string };
+    //   "en-US": { content: string; shortDescription: string; title: string };
+    // };
   }>;
 };
 
