@@ -20,6 +20,11 @@ import { TagCloudSimpleHome } from "@/components/search/tagcloudsimpleHome.compo
 import Link from "next/link";
 import { LandingContent } from "@/components/contentful/ArticleContentLanding";
 
+// import FileUpload from "@/components/azure/storageaccounts/uploadfiles.component";
+// import FileList from "@/components/azure/storageaccounts/listfiles.component";
+
+import FileUploader from "@/components/azure/storageaccounts/fileuploader.component";
+
 export const revalidate = revalidateDuration; // revalidate at most every hour
 
 interface PageParams {
@@ -262,6 +267,14 @@ async function Home({ params }: PageProps) {
           locale={params.locale.toString()}
         />
       </Container>
+      <div className="flex justify-center items-center min-h-screen">
+        <FileUploader />
+      </div>
+      {/* <div className="mx-6">
+        <h1 className="mb-2">File Upload to Azure Storage</h1>
+        <FileUpload />
+        <FileList />
+      </div> */}
     </>
   );
 }

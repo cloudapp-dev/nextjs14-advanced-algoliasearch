@@ -81,7 +81,7 @@ export default async function RootLayout({ children, params }: LayoutProps) {
               )}
               {children}
               {/*PiwikPro */}
-              <PiwikPro />
+              {/* <PiwikPro /> */}
               <Footer footerItems={footerdata} />
             </Providers>
           </NextAuthProvider>

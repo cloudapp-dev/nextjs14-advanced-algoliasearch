@@ -100,6 +100,8 @@ export const contentfulBaseRichTextOptions = ({
           if (paragraph_type === "code") {
             return <div>{children}</div>;
           }
+        } else {
+          return <p>{children}</p>;
         }
       } else {
         return <p>{children}</p>;
