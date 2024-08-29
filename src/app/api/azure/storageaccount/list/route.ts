@@ -4,6 +4,8 @@ import {
   StorageSharedKeyCredential,
 } from "@azure/storage-blob";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest, res: NextResponse) {
   const {
     AZURE_STORAGE_ACCOUNT_NAME,
