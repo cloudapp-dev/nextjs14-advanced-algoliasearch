@@ -5,7 +5,7 @@ const endpointOverride = process.env.CONTENTFUL_GRAPHQL_ENDPOINT;
 const productionEndpoint = "https://graphql.contentful.com/content/v1/spaces";
 export const endpoint = `${endpointOverride || productionEndpoint}/${
   process.env.CONTENTFUL_SPACE_ID
-}`;
+}/environments/${process.env.CONTENTFUL_ENVIRONMENT}/`;
 
 export const config: CodegenConfig = {
   overwrite: true,
