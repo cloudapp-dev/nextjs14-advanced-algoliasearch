@@ -19,6 +19,7 @@ import { revalidateDuration } from "@/utils/constants";
 import { TagCloudSimpleHome } from "@/components/search/tagcloudsimpleHome.component";
 import Link from "next/link";
 import { LandingContent } from "@/components/contentful/ArticleContentLanding";
+// import FileUploader from "@/components/azure/storageaccounts/fileuploader.component";
 
 export const revalidate = revalidateDuration; // revalidate at most every hour
 
@@ -262,6 +263,9 @@ async function Home({ params }: PageProps) {
           locale={params.locale.toString()}
         />
       </Container>
+      {/* <div className="flex justify-center items-center min-h-screen">
+        <FileUploader />
+      </div> */}
     </>
   );
 }
