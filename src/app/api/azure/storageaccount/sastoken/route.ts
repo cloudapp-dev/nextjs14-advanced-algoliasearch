@@ -7,6 +7,9 @@ import {
 import { NextResponse, NextRequest } from "next/server";
 
 export async function POST(req: NextRequest, res: NextResponse) {
+  const body = await req.json();
+  const fileName = body.fileName as string;
+
   const {
     AZURE_STORAGE_ACCOUNT_NAME,
     AZURE_STORAGE_ACCOUNT_KEY,
@@ -25,8 +28,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
   }
 
   try {
-    const formData = await req.formData();
-
     const blobServiceClient = new BlobServiceClient(
       `https://${AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net`,
       new StorageSharedKeyCredential(
@@ -40,7 +41,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       AZURE_STORAGE_CONTAINER_NAME
     );
 
-    const blobName = formData.get("fileName") as string;
+    const blobName = fileName;
     const blobClient = containerClient.getBlockBlobClient(blobName);
 
     const sasToken = generateBlobSASQueryParameters(

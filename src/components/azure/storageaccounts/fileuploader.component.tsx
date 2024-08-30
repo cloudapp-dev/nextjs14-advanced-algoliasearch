@@ -59,19 +59,22 @@ const FileUploader = () => {
 
   const uploadFileToAzure = async (file: File, index: number) => {
     const updatedFiles = [...files];
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("fileName", file.name);
 
+    // Step 1: Request SAS token from the API
     try {
       const response = await fetch("/api/azure/storageaccount/sastoken", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fileName: file.name,
+        }),
       });
 
       const { uploadUrl, blobUrl } = await response.json();
 
-      // Upload the file directly to Azure Blob Storage using the SAS URL
+      // Step 2: Upload the file directly to Azure Blob Storage using the SAS URL
       const xhr = new XMLHttpRequest();
       xhr.open("PUT", uploadUrl, true);
       xhr.setRequestHeader("x-ms-blob-type", "BlockBlob");
