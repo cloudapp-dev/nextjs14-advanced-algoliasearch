@@ -20,10 +20,10 @@ interface FileWithProgress {
 
 const MAX_DISK_SPACE_MB = 5 * 1024; // 5 GB in MB
 
-const FileUploader = () => {
+const FileUploaderApi = () => {
   const [files, setFiles] = useState<FileWithProgress[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<
-    { name: string; size: number; url: string }[]
+    { name: string; size: number }[]
   >([]);
 
   const [totalDiskSpace, setTotalDiskSpace] = useState<number>(0);
@@ -57,45 +57,32 @@ const FileUploader = () => {
     multiple: true,
   });
 
-  const uploadFileToAzure = async (file: File, index: number) => {
+  // Handle file upload
+  const handleUpload = async () => {
     const updatedFiles = [...files];
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("fileName", file.name);
 
-    try {
-      const response = await fetch("/api/azure/storageaccount/sastoken", {
-        method: "POST",
-        body: formData,
-      });
+    for (let i = 0; i < files.length; i++) {
+      const { file } = files[i];
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("fileName", file.name);
 
-      const { uploadUrl, blobUrl } = await response.json();
-
-      // Upload the file directly to Azure Blob Storage using the SAS URL
       const xhr = new XMLHttpRequest();
-      xhr.open("PUT", uploadUrl, true);
-      xhr.setRequestHeader("x-ms-blob-type", "BlockBlob");
-      xhr.setRequestHeader("Content-Type", file.type);
+      xhr.open("POST", "/api/azure/storageaccount/upload", true);
 
       xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
           const percentComplete = (event.loaded / event.total) * 100;
-          updatedFiles[index].progress = percentComplete;
+          updatedFiles[i].progress = percentComplete;
           setFiles([...updatedFiles]);
         }
       };
 
       xhr.onload = () => {
-        if (xhr.status === 201) {
-          // console.log(`File ${file.name} uploaded successfully!`);
-          setFiles((prevFiles) => {
-            const updatedFiles = [...prevFiles];
-            updatedFiles[index].uploaded = true;
-            return updatedFiles;
-          });
-          fetchUploadedFiles(); // Refresh the uploaded files list
+        if (xhr.status === 200) {
+          console.log(`File ${file.name} uploaded successfully`);
         } else {
-          console.error(`Error uploading file ${file.name}`);
+          console.error(`File ${file.name} upload failed`);
         }
       };
 
@@ -105,19 +92,14 @@ const FileUploader = () => {
 
       await new Promise((resolve) => {
         xhr.onloadend = resolve;
-        xhr.send(file);
+        xhr.send(formData);
       });
-    } catch (error) {
-      console.error(`Failed to upload file ${file.name}:`, error);
     }
-  };
 
-  const handleUpload = () => {
-    files.forEach((fileWithProgress, index) => {
-      if (!fileWithProgress.uploaded) {
-        uploadFileToAzure(fileWithProgress.file, index);
-      }
-    });
+    // Refresh the uploaded files list after all uploads are done
+    await fetchUploadedFiles();
+    // Clear the upload list after successful uploads
+    setFiles([]);
   };
 
   // Handle file deletion before upload
@@ -140,7 +122,7 @@ const FileUploader = () => {
       );
 
       if (response.ok) {
-        // console.log(`File ${fileName} deleted successfully`);
+        console.log(`File ${fileName} deleted successfully`);
         fetchUploadedFiles(); // Refresh the uploaded files list after deletion
       } else {
         console.error(`Failed to delete file ${fileName}`);
@@ -158,7 +140,7 @@ const FileUploader = () => {
       });
 
       if (response.ok) {
-        // console.log("All files deleted successfully");
+        console.log("All files deleted successfully");
         fetchUploadedFiles(); // Refresh the uploaded files list after deletion
       } else {
         console.error("Failed to delete all files");
@@ -213,7 +195,7 @@ const FileUploader = () => {
   return (
     <div className="max-w-2xl mx-auto mt-8 dark:bg-gray-800 p-6 rounded-lg shadow-md">
       <h1 className="text-3xl font-bold text-center mb-8">
-        Multi-File Upload to Azure Storage
+        Multi-File Upload to Azure Storage via API
         {totalDiskSpace > 0 && (
           <span className="text-lg font-normal">
             {" "}
@@ -348,4 +330,4 @@ const FileUploader = () => {
   );
 };
 
-export default FileUploader;
+export default FileUploaderApi;

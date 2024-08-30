@@ -3,8 +3,15 @@ import {
   BlobServiceClient,
   StorageSharedKeyCredential,
 } from "@azure/storage-blob";
+import { getToken } from "next-auth/jwt";
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE(req: NextRequest) {
+  const token = await getToken({ req });
+
+  if (!token) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const {
     AZURE_STORAGE_ACCOUNT_NAME,
     AZURE_STORAGE_ACCOUNT_KEY,

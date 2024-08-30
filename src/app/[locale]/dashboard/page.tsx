@@ -7,6 +7,8 @@ import { createTranslation } from "@/app/i18n/server";
 import type { LocaleTypes } from "@/app/i18n/settings";
 import Sidebar from "@/components/sidebar/dashboard/sidebar.component";
 import FileUploader from "@/components/azure/storageaccounts/fileuploader.component";
+// import FileUploaderNoProgressBar from "@/components/azure/storageaccounts/fileuploadernoprogressbar.component";
+// import FileUploaderApi from "@/components/azure/storageaccounts/fileuploaderApi.component";
 
 export default async function Dashboard({
   params: { locale },
@@ -34,11 +36,16 @@ export default async function Dashboard({
     <main className="p-4 mx-auto md:p-10 max-w-7xl">
       {/* Sidebar */}
       <Sidebar />
-
       {/* FileUploader */}
       <div className="flex justify-center items-center min-h-screen">
         <FileUploader />
       </div>
+      {/* <div className="flex justify-center items-center min-h-screen">
+        <FileUploaderNoProgressBar />
+      </div>
+      <div className="flex justify-center items-center min-h-screen">
+        <FileUploaderApi />
+      </div> */}
     </main>
   );
 }

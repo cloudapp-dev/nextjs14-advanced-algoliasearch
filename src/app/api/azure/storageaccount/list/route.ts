@@ -3,10 +3,17 @@ import {
   BlobServiceClient,
   StorageSharedKeyCredential,
 } from "@azure/storage-blob";
+import { getToken } from "next-auth/jwt";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest, res: NextResponse) {
+  const token = await getToken({ req });
+
+  if (!token) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const {
     AZURE_STORAGE_ACCOUNT_NAME,
     AZURE_STORAGE_ACCOUNT_KEY,
