@@ -12,19 +12,33 @@ const formatFileSizeMB = (size: number) => {
   return `${(size / (1024 * 1024)).toFixed(2)} MB`;
 };
 
+// Helper function to format dates in a readable format
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString() + " " + date.toLocaleTimeString();
+};
+
 interface FileWithProgress {
   file: File;
   progress: number;
   uploaded: boolean;
 }
 
+interface UploadedFile {
+  name: string;
+  size: number;
+  url: string;
+  createdAt: string; // Added createdAt for displaying creation date
+}
+
 const MAX_DISK_SPACE_MB = 5 * 1024; // 5 GB in MB
 
 const FileUploader = () => {
   const [files, setFiles] = useState<FileWithProgress[]>([]);
-  const [uploadedFiles, setUploadedFiles] = useState<
-    { name: string; size: number; url: string }[]
-  >([]);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  // const [uploadedFiles, setUploadedFiles] = useState<
+  //   { name: string; size: number; url: string }[]
+  // >([]);
 
   const [totalDiskSpace, setTotalDiskSpace] = useState<number>(0);
 
@@ -39,7 +53,11 @@ const FileUploader = () => {
       0
     );
     setTotalDiskSpace(totalSize / (1024 * 1024)); // Convert total size to MB
-    setFiles([]); // Clear the upload list after successful uploads
+  };
+
+  // Clear Uploaded File List
+  const clearuploadedFileList = () => {
+    setFiles([]);
   };
 
   // Handle file drop
@@ -326,6 +344,12 @@ const FileUploader = () => {
             >
               Refresh File List
             </button>
+            <button
+              onClick={clearuploadedFileList}
+              className="ml-4 mb-4 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+            >
+              Clear Uploaded File List
+            </button>
             <ul className="list-disc  pl-6 space-y-2">
               {uploadedFiles.map((file, index) => (
                 <li
@@ -335,6 +359,8 @@ const FileUploader = () => {
                   <span>
                     {file.name} - {formatFileSizeMB(file.size)}
                   </span>
+                  <br />
+                  <span>Created At: {formatDate(file.createdAt)}</span>{" "}
                   <button
                     onClick={() => handleDeleteAfterUpload(file.name)}
                     className="text-red-600 hover:text-red-800"

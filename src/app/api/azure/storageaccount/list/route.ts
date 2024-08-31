@@ -49,6 +49,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
       blobs.push({
         name: blob.name,
         size: blob.properties.contentLength || 0, // Size in bytes
+        createdAt: blob.properties.createdOn,
       });
     }
 
