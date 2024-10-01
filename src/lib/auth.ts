@@ -42,7 +42,7 @@ export const authOptions: NextAuthOptions = {
         // token.subscribed = user.subscribed;
       }
       if (profile) {
-        token.role = profile?.extension_Role;
+        token.role = profile?.extension_Rolle;
       }
       return token;
     },

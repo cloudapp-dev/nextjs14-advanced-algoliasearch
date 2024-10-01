@@ -16,6 +16,8 @@ import { Metadata, ResolvingMetadata } from "next";
 import { TagCloudSimpleHome } from "@/components/search/tagcloudsimpleHome.component";
 // Claps
 import ClapButton from "@/components/contentful/ClapButton.component";
+// Buymeacoffee
+import Buymeacoffe from "@/components/sharing/buymeacoffee.component";
 // ViewCount
 // import { ReportView } from "@/components/analytics/viewcount";
 import redis from "../../../lib/redis";
@@ -291,6 +293,7 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
             locale={params.locale.toString()}
             postCount={relatedPosts.length}
           />
+          <Buymeacoffe />
         </Container>
       )}
       <Container className="max-w-5xl mt-8">

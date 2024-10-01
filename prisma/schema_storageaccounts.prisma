@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+  output        = "./generated/client_storageaccount"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL_STORAGEACCOUNTS")
+}
+
+model ResourceGroup {
+  id              Int              @id @default(autoincrement()) // Primary key
+  userId          String           @default("0") // The user ID
+  name            String           @unique // Name of the resource group, unique
+  createdAt       DateTime         @default(now()) // Creation date
+  storageAccounts StorageAccount[] // Relation to StorageAccount model
+}
+
+model StorageAccount {
+  id                 Int           @id @default(autoincrement()) // Primary key
+  userId             String // The user ID
+  storageAccountName String // Name of the storage account
+  resourceGroupId    Int // Foreign key to ResourceGroup
+  accessKey          String? // Access key for the storage account
+  createdAt          DateTime      @default(now()) // Creation date
+  containers         Container[] // Relation to Container model
+  resourceGroup      ResourceGroup @relation(fields: [resourceGroupId], references: [id], onDelete: Cascade) // Relation to ResourceGroup
+
+  @@unique([userId, storageAccountName]) // Unique constraint to ensure no duplicate storage accounts for a user
+}
+
+model Container {
+  id               Int            @id @default(autoincrement()) // Primary key
+  containerName    String // Name of the container
+  storageAccountId Int // Foreign key to StorageAccount
+  createdAt        DateTime       @default(now()) // Creation date
+  storageAccount   StorageAccount @relation(fields: [storageAccountId], references: [id], onDelete: Cascade) // Relation to StorageAccount
+
+  @@unique([storageAccountId, containerName]) // Unique constraint to ensure no duplicate container names within a storage account
+}
+
+model Operations {
+  id            Int      @id @default(autoincrement()) // Primary key
+  resourcegroup String // Name of the RGGroup
+  creation      String   @default("NoOps") // Creation of the resource group
+  deletion      String   @default("NoOps") // Deletion of the resource group
+  createdAt     DateTime @default(now()) // Creation date
+}

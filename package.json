@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "npx prisma generate --schema=prisma/schema.prisma && npx prisma generate --schema=prisma/schema_storageaccounts.prisma && next build",
     "start": "next start",
     "lint": "next lint",
     "cf-export": "source .env.local && contentful space export --config contentfulsync/export/config/export-config.json --management-token $CONTENTFUL_MANAGEMENT_TOKEN --space-id $CONTENTFUL_SPACE_ID",

@@ -4,6 +4,7 @@
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-1.1.x"]
+  output        = "./generated/client"
 }
 
 datasource db {
@@ -24,6 +25,7 @@ model logins {
 model ApiToken {
   tokenId        String   @id @default(cuid())
   accessToken    String   @db.VarChar
+  refreshToken   String   @default("RefreshToken") @db.VarChar
   tokenType      String   @default("Azure")
   expirationDate DateTime
   addedOn        DateTime @default(now())
@@ -50,5 +52,23 @@ model tracking {
   referer    String?
   fetchsite  String?
   created_at DateTime?
+  addedOn    DateTime  @default(now())
+}
+
+model customtracking {
+  id         Int       @id @default(autoincrement())
+  country    String?
+  city       String?
+  region     String?
+  url        String?
+  pathname   String?
+  mobile     Boolean?
+  platform   String?
+  useragent  String?
+  referer    String?
+  created_at DateTime?
+  sessionId  String?
+  userId     String?
+  pageViewId String?
   addedOn    DateTime  @default(now())
 }
