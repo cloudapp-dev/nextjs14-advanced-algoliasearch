@@ -5,16 +5,32 @@ import {
   ContainerSASPermissions,
 } from "@azure/storage-blob";
 import { NextResponse, NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
+  const token = await getToken({ req });
   const body = await req.json();
   const fileName = body.fileName as string;
 
-  const {
-    AZURE_STORAGE_ACCOUNT_NAME,
-    AZURE_STORAGE_ACCOUNT_KEY,
-    AZURE_STORAGE_CONTAINER_NAME,
-  } = process.env;
+  if (!token) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { storageAccountName, accessKey, containerName } = body;
+
+  // console.log("sas Accesskey", accessKey);
+  // console.log("sas storageaccountname", storageAccountName);
+  // console.log("sas containername", containerName);
+
+  let AZURE_STORAGE_ACCOUNT_NAME: string = storageAccountName;
+  let AZURE_STORAGE_ACCOUNT_KEY: string = accessKey;
+  let AZURE_STORAGE_CONTAINER_NAME: string = containerName;
+
+  // const {
+  //   AZURE_STORAGE_ACCOUNT_NAME,
+  //   AZURE_STORAGE_ACCOUNT_KEY,
+  //   AZURE_STORAGE_CONTAINER_NAME,
+  // } = process.env;
 
   if (
     !AZURE_STORAGE_ACCOUNT_NAME ||
@@ -22,7 +38,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     !AZURE_STORAGE_CONTAINER_NAME
   ) {
     return NextResponse.json(
-      { error: "Azure Storage credentials are missing" },
+      { error: "SAS Azure Storage credentials are missing" },
       { status: 500 }
     );
   }

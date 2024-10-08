@@ -20,14 +20,34 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if a storage account exists for the given user ID
-    const storageAccount = await prisma_storageaccount.storageAccount.findFirst(
-      {
-        where: { userId: userId },
-      }
-    );
+    const storageAccount = await prisma_storageaccount.storageAccount.findMany({
+      where: {
+        userId: userId,
+      },
+      select: {
+        storageAccountName: true,
+        accessKey: true,
+        containers: {
+          select: {
+            containerName: true,
+          },
+        },
+        resourceGroup: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
 
     return NextResponse.json(
-      { hasStorageAccount: !!storageAccount },
+      {
+        hasStorageAccount: !!storageAccount,
+        storageAccountName: storageAccount[0]?.storageAccountName || "",
+        accessKey: storageAccount[0]?.accessKey || "",
+        containerName: storageAccount[0]?.containers[0]?.containerName || "",
+        resourceGroupName: storageAccount[0]?.resourceGroup.name || "",
+      },
       { status: 200 }
     );
   } catch (error) {

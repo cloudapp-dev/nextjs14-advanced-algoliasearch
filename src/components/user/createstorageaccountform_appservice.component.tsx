@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import LoadingButton from "@/components/tools/loadingbutton/loadingbutton.component";
+import FileUploader from "@/components/azure/storageaccounts/fileuploader.component";
 
 // Utility function to generate a random alphanumeric string of a specified length
 const generateRandomName = (length: number) => {
@@ -12,6 +13,8 @@ const generateRandomName = (length: number) => {
   }
   return result;
 };
+
+// const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const CreateStorageAccountFormAppService: React.FC = () => {
   const { data: session } = useSession();
@@ -33,6 +36,8 @@ const CreateStorageAccountFormAppService: React.FC = () => {
   const [containerName, setContainerName] = useState("mycontainer"); // Default value
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [storageAccountName, setStorageAccountName] = useState(""); // State to store storage account name
+  const [accessKey, setAccessKey] = useState(""); // State to store access key
   const [containers, setContainers] = useState<string[]>([]); // State to store fetched containers
   const [azureops, setAzureOps] = useState(""); // State for Azure Operations
   const [hasStorageAccount, setHasStorageAccount] = useState(false); // State to check if user already has a storage account
@@ -54,8 +59,20 @@ const CreateStorageAccountFormAppService: React.FC = () => {
       );
 
       if (response.ok) {
-        const data: { hasStorageAccount: boolean } = await response.json();
-        setHasStorageAccount(data.hasStorageAccount);
+        const data: {
+          hasStorageAccount: boolean;
+          storageAccountName: string;
+          accessKey: string;
+          containerName: string;
+          resourceGroupName: string;
+        } = await response.json();
+        // setHasStorageAccount(data.hasStorageAccount);
+        setHasStorageAccount(data.storageAccountName !== "");
+        setStorageAccountName(data.storageAccountName);
+        setAccessKey(data.accessKey);
+        setContainerName(data.containerName || "mycontainer");
+        setResourceGroupName(data.resourceGroupName);
+        // console.log("resourceGroupName:", data.resourceGroupName);
       } else {
         console.error("Error checking storage account existence.");
       }
@@ -123,6 +140,11 @@ const CreateStorageAccountFormAppService: React.FC = () => {
   const handleDeleteStorageAccount = async () => {
     if (!accountName) return; // No storage account name available
 
+    // Check if user has a storage account and get Resource Group Name
+    checkIfUserHasStorageAccount();
+
+    // console.log("Deleting resourceGroup:", resourceGroupName);
+
     setLoading(true);
     setMessage("");
     setAzureOps("delete");
@@ -156,6 +178,7 @@ const CreateStorageAccountFormAppService: React.FC = () => {
           body: JSON.stringify({
             tagKey: "user",
             tagValue: user_az_id,
+            user_email,
             resourceGroupName: resourceGroupName,
           }),
         }
@@ -180,9 +203,18 @@ const CreateStorageAccountFormAppService: React.FC = () => {
     setAzureOps("create");
     setContainers([]); // Clear previous container list
 
-    // Check if storageaccount and/or Resource Group already exists
-
     try {
+      let randomName = resourceGroupName; // Start with the current state value
+
+      // Check if Resource Group Name is empty
+      if (resourceGroupName === "") {
+        // console.error("Resource Group Name is empty");
+        randomName = generateRandomName(24); // Generate a new name
+        setResourceGroupName(randomName); // Update the state, but it may not reflect immediately
+      }
+
+      const newTags = { evn: "production", user: user_az_id };
+
       // Creating Records in Operationstable
       const operation = "create";
       const value = "pending";
@@ -194,7 +226,8 @@ const CreateStorageAccountFormAppService: React.FC = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          resourceGroupName,
+          resourceGroupName: randomName, // Use the `randomName` directly
+          tags: newTags,
           operation,
           value,
         }),
@@ -209,10 +242,10 @@ const CreateStorageAccountFormAppService: React.FC = () => {
             Authorization: "Bearer " + token,
           },
           body: JSON.stringify({
-            resourceGroupName,
+            resourceGroupName: randomName,
             accountName,
             location,
-            tags,
+            tags: newTags,
             containerName,
             user_az_id,
             user_email,
@@ -223,6 +256,7 @@ const CreateStorageAccountFormAppService: React.FC = () => {
       if (response.ok) {
         const successData = await response.text();
         setMessage(`Success: ${successData}`);
+        checkIfUserHasStorageAccount();
       } else {
         const errorData = await response.text();
         setMessage(`Error: ${errorData}`);
@@ -241,12 +275,21 @@ const CreateStorageAccountFormAppService: React.FC = () => {
       </h2>
       {/* Delete Storage Account Button */}
       {hasStorageAccount && (
-        <LoadingButton
-          loading={loading}
-          onClick={handleDeleteStorageAccount}
-          startlabel="Deleting Storage Account"
-          loadinglabel="Deleting ..."
-        />
+        <>
+          <LoadingButton
+            loading={loading}
+            onClick={handleDeleteStorageAccount}
+            startlabel="Deleting Storage Account"
+            loadinglabel="Deleting ..."
+          />
+          <div className="flex justify-center items-center min-h-screen">
+            <FileUploader
+              storageAccountName={storageAccountName}
+              accessKey={accessKey}
+              containerName={containerName}
+            />
+          </div>
+        </>
       )}
       {!hasStorageAccount && (
         <LoadingButton

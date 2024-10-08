@@ -44,6 +44,8 @@ export async function POST(req: NextRequest) {
     // Convert the payload to a JSON string
     const message = payload;
 
+    // console.log("Payload", payload);
+
     if (!message) {
       return NextResponse.json(
         { error: "Message body is required." },

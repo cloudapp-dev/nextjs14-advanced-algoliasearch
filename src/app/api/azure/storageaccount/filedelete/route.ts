@@ -12,6 +12,12 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const { storageAccountName, accessKey, containerName } = await req.json();
+
+  let AZURE_STORAGE_ACCOUNT_NAME: string = storageAccountName || "";
+  let AZURE_STORAGE_ACCOUNT_KEY: string = accessKey || "";
+  let AZURE_STORAGE_CONTAINER_NAME: string = containerName || "";
+
   const { searchParams } = new URL(req.url);
   const fileName = searchParams.get("fileName");
 
@@ -22,11 +28,15 @@ export async function DELETE(req: NextRequest) {
     );
   }
 
-  const {
-    AZURE_STORAGE_ACCOUNT_NAME,
-    AZURE_STORAGE_ACCOUNT_KEY,
-    AZURE_STORAGE_CONTAINER_NAME,
-  } = process.env;
+  console.log("Azure Storage Account Name:", AZURE_STORAGE_ACCOUNT_NAME);
+  console.log("Azure Storage Account Key:", AZURE_STORAGE_ACCOUNT_KEY);
+  console.log("Azure Storage Container Name:", AZURE_STORAGE_CONTAINER_NAME);
+
+  // const {
+  //   AZURE_STORAGE_ACCOUNT_NAME,
+  //   AZURE_STORAGE_ACCOUNT_KEY,
+  //   AZURE_STORAGE_CONTAINER_NAME,
+  // } = process.env;
 
   if (
     !AZURE_STORAGE_ACCOUNT_NAME ||
@@ -34,7 +44,7 @@ export async function DELETE(req: NextRequest) {
     !AZURE_STORAGE_CONTAINER_NAME
   ) {
     return NextResponse.json(
-      { error: "Azure Storage credentials are missing" },
+      { error: "FileDelete Azure Storage credentials are missing" },
       { status: 500 }
     );
   }

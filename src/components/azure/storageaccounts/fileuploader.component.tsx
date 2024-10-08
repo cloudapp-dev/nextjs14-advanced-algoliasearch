@@ -33,18 +33,43 @@ interface UploadedFile {
 
 const MAX_DISK_SPACE_MB = 5 * 1024; // 5 GB in MB
 
-const FileUploader = () => {
+interface FileUploaderProps {
+  storageAccountName: string; // Prop to control loading state
+  accessKey: string; // Prop to set the button label when not loading
+  containerName?: string; // Prop to set the button label when loading is finished
+}
+
+const FileUploader: React.FC<FileUploaderProps> = ({
+  storageAccountName,
+  accessKey,
+  containerName,
+}) => {
   const [files, setFiles] = useState<FileWithProgress[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   // const [uploadedFiles, setUploadedFiles] = useState<
   //   { name: string; size: number; url: string }[]
   // >([]);
 
+  // console.log("storageaccountname", storageAccountName);
+  // console.log("accessKey", accessKey);
+  // console.log("containername", containerName);
+
   const [totalDiskSpace, setTotalDiskSpace] = useState<number>(0);
 
   // Fetch the list of uploaded files from the server and calculate total disk space
-  const fetchUploadedFiles = async () => {
-    const response = await fetch("/api/azure/storageaccount/list");
+  const fetchUploadedFiles = useCallback(async () => {
+    const response = await fetch("/api/azure/storageaccount/list", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        storageAccountName: storageAccountName || "",
+        accessKey: accessKey || "",
+        containerName: containerName || "",
+      }),
+    });
+
     const data = await response.json();
     setUploadedFiles(data.files);
 
@@ -53,7 +78,7 @@ const FileUploader = () => {
       0
     );
     setTotalDiskSpace(totalSize / (1024 * 1024)); // Convert total size to MB
-  };
+  }, [storageAccountName, accessKey, containerName]);
 
   // Clear Uploaded File List
   const clearuploadedFileList = () => {
@@ -87,6 +112,9 @@ const FileUploader = () => {
         },
         body: JSON.stringify({
           fileName: file.name,
+          storageAccountName: storageAccountName,
+          accessKey: accessKey,
+          containerName: containerName,
         }),
       });
 
@@ -157,6 +185,14 @@ const FileUploader = () => {
         )}`,
         {
           method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            storageAccountName: storageAccountName,
+            accessKey: accessKey,
+            containerName: containerName,
+          }),
         }
       );
 
@@ -176,6 +212,14 @@ const FileUploader = () => {
     try {
       const response = await fetch("/api/azure/storageaccount/deleteall", {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          storageAccountName: storageAccountName,
+          accessKey: accessKey,
+          containerName: containerName,
+        }),
       });
 
       if (response.ok) {
@@ -192,7 +236,7 @@ const FileUploader = () => {
   // Fetch files on component mount
   useEffect(() => {
     fetchUploadedFiles();
-  }, []);
+  }, [fetchUploadedFiles]);
 
   // Data for the donut chart
   const donutChartData = {
@@ -330,7 +374,7 @@ const FileUploader = () => {
       {/* Uploaded Files Section with Delete Option */}
       <div className="mt-8">
         <h2 className="text-xl font-bold mb-4">Uploaded Files</h2>
-        {uploadedFiles.length > 0 && (
+        {uploadedFiles && uploadedFiles.length > 0 && (
           <>
             <button
               onClick={handleDeleteAll}

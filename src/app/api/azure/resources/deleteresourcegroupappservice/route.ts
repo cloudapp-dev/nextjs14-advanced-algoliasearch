@@ -21,13 +21,15 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { tagKey, tagValue, resourceGroupName } = await req.json();
+    const { tagKey, tagValue, resourceGroupName, user_email } =
+      await req.json();
 
     // Payload to send
     const payload: any = {
       tagKey,
       tagValue,
       resourceGroupName,
+      user_email,
     };
     // Convert the payload to a JSON string
     const message = payload;

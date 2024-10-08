@@ -7,28 +7,48 @@ import { getToken } from "next-auth/jwt";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   const token = await getToken({ req });
 
   if (!token) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const {
-    AZURE_STORAGE_ACCOUNT_NAME,
-    AZURE_STORAGE_ACCOUNT_KEY,
-    AZURE_STORAGE_CONTAINER_NAME,
-  } = process.env;
+  const { storageAccountName, accessKey, containerName } = await req.json();
+
+  // console.log("Accesskey", accessKey);
+  // console.log("storageaccountname", storageAccountName);
+  // console.log("containername", containerName);
+
+  let AZURE_STORAGE_ACCOUNT_NAME: string = storageAccountName || "";
+  let AZURE_STORAGE_ACCOUNT_KEY: string = accessKey || "";
+  let AZURE_STORAGE_CONTAINER_NAME: string = containerName || "";
+
+  // console.log("Azure Storage Account Name:", AZURE_STORAGE_ACCOUNT_NAME);
+  // console.log("Azure Storage Account Key:", AZURE_STORAGE_ACCOUNT_KEY);
+  // console.log("Azure Storage Container Name:", AZURE_STORAGE_CONTAINER_NAME);
+
+  // const {
+  //   AZURE_STORAGE_ACCOUNT_NAME,
+  //   AZURE_STORAGE_ACCOUNT_KEY,
+  //   AZURE_STORAGE_CONTAINER_NAME,
+  // } = process.env;
 
   if (
+    AZURE_STORAGE_ACCOUNT_NAME == "" ||
+    AZURE_STORAGE_ACCOUNT_KEY == "" ||
+    AZURE_STORAGE_CONTAINER_NAME == "" ||
     !AZURE_STORAGE_ACCOUNT_NAME ||
     !AZURE_STORAGE_ACCOUNT_KEY ||
     !AZURE_STORAGE_CONTAINER_NAME
   ) {
-    return NextResponse.json(
-      { error: "Azure Storage credentials are missing" },
-      { status: 500 }
-    );
+    console.log("LIST Azure Storage credentials are missing");
+    const blobs: any = [];
+    return NextResponse.json({ files: blobs });
+    // return NextResponse.json(
+    //   // { error: "Azure Storage credentials are missing" },
+    //   // { status: 500 }
+    // );
   }
 
   try {
