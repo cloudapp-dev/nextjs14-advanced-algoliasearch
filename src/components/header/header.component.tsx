@@ -19,7 +19,7 @@ export default function Header({ showBar, menuItems, logourl }: HeaderProps) {
       {showBar && (
         <SearchBar
           searchCta="Search"
-          searchPlaceholder="Search example.dev..."
+          searchPlaceholder="Search CloudApp.dev..."
         />
       )}
     </header>

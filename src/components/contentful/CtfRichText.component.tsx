@@ -5,6 +5,7 @@ import {
 } from "@contentful/rich-text-react-renderer";
 import { BLOCKS, MARKS, Document, INLINES } from "@contentful/rich-text-types";
 import { ArticleImage } from "@/components/contentful/ArticleImage.component";
+import { ArticleRichImage } from "@/components/contentful/ArticleRichImage";
 import { ComponentRichImage, NavItem } from "@/lib/__generated/sdk";
 import { Toc } from "@/components/contentful/ArticleToc";
 import { ArticleTocItem } from "@/components/contentful/ArticleTocItem";
@@ -12,7 +13,6 @@ import { ArticleH3Item } from "@/components/contentful/ArticleH3Item";
 import { CtfPicture } from "@/components/contentful/CtfPicture.component";
 import { twMerge } from "tailwind-merge";
 import Link from "next/link";
-
 import SyntaxHighlightPost from "@/components/tools/syntaxhighlight/syntaxhighlightPost.component";
 
 export type EmbeddedEntryType = ComponentRichImage | NavItem | null;
@@ -32,7 +32,7 @@ export interface ContentfulRichTextInterface {
 export const EmbeddedEntry = (entry: EmbeddedEntryType) => {
   switch (entry?.__typename) {
     case "ComponentRichImage":
-      return <ArticleImage image={entry} />;
+      return <ArticleRichImage image={entry} />;
     case "NavItem":
       return (
         <Link
@@ -52,6 +52,7 @@ export const contentfulBaseRichTextOptions = ({
 }: ContentfulRichTextInterface): Options => ({
   renderMark: {
     [MARKS.BOLD]: (text) => {
+      // console.log("text bold", text);
       return <b key={`${text}-key`}>{text}</b>;
     },
     [MARKS.CODE]: (text: any) => {
@@ -86,11 +87,12 @@ export const contentfulBaseRichTextOptions = ({
     [BLOCKS.HEADING_2]: (node, children: any) => {
       return <ArticleTocItem dynamicId={children[0]} heading={children[0]} />;
     },
-    [BLOCKS.HEADING_3]: (node, children: any) => {
-      return <ArticleH3Item heading={children} />;
-    },
+    // [BLOCKS.HEADING_3]: (node, children: any) => {
+    //   return <ArticleH3Item heading={children} />;
+    // },
     [BLOCKS.PARAGRAPH]: (node, children) => {
       //Entfernen des <p> Tags bei Codeelementen im Frontend
+      // console.log("node paragraph", node.content[0]);
       const markValue: any = node.content[0];
       let markLength: number = 0;
       if (markValue.hasOwnProperty("marks")) {
@@ -99,6 +101,8 @@ export const contentfulBaseRichTextOptions = ({
           const paragraph_type = markValue.marks[0].type;
           if (paragraph_type === "code") {
             return <div>{children}</div>;
+          } else if (paragraph_type === "bold") {
+            return <p>{children}</p>;
           }
         } else {
           return <p>{children}</p>;
@@ -134,7 +138,9 @@ export const contentfulBaseRichTextOptions = ({
             <>
               <figure>
                 <div className="flex justify-center">
-                  <CtfPicture
+                  <ArticleImage image={asset} />
+                  {/* <ArticleImage asset={asset} /> */}
+                  {/* <CtfPicture
                     nextImageProps={{
                       className: twMerge(
                         "mt-0 mb-0 ",
@@ -143,8 +149,7 @@ export const contentfulBaseRichTextOptions = ({
                       priority: false,
                     }}
                     {...asset}
-                  />
-                  ;
+                  /> */}
                 </div>
               </figure>
             </>

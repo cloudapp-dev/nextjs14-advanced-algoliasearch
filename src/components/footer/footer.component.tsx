@@ -81,7 +81,8 @@ export default function Footer({ footerItems }: any) {
         <div className="pt-8 mt-8 border-gray-200 md:flex md:items-center md:justify-between">
           <div className="flex space-x-6 md:order-2"></div>
           <p className="mt-8 text-base dark:text-[#AEC1CC] text-gray-500 md:mt-0 md:order-1">
-            Copyright 2021, All rights reserved.
+            {/* {footerNav.footerNav.copyright} */}
+            {footerItems.copyright}
           </p>
         </div>
       </div>

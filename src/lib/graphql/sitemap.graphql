@@ -1,27 +1,43 @@
 fragment sitemapPagesFields on Query {
-  pageBlogPostCollection(limit: 100, locale: $locale) {
+  pageBlogPostCollection(
+    order: [publishedDate_DESC]
+    limit: 100
+    locale: $locale
+  ) {
+    total
     items {
+      slug
       internalName
       title
+      sys {
+        publishedAt
+      }
+    }
+  }
+  pageLandingCollection(order: [internalName_ASC], limit: 50, locale: $locale) {
+    total
+    items {
+      slug
+      internalName
+      sys {
+        publishedAt
+      }
+    }
+  }
+  pagesCollection(limit: 10, locale: $locale) {
+    total
+    items {
       slug
       sys {
         publishedAt
       }
     }
   }
-  pageLandingCollection(limit: 50, locale: $locale) {
+  tagPageCollection(order: [tag_ASC], limit: 50, locale: $locale) {
+    total
     items {
-      internalName
-      slug
-      sys {
-        publishedAt
-      }
-    }
-  }
-  tagPageCollection(limit: 50, locale: $locale) {
-    items {
-      internalName
       tag
+      internalName
       sys {
         publishedAt
       }

@@ -5,6 +5,7 @@ fragment FooterItemGroupFields on FooterItemGroup {
     spaceId
   }
   name
+  copyright
   footerItemsCollection {
     __typename
     items {

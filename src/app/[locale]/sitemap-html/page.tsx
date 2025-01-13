@@ -5,6 +5,7 @@ import { LandingContent } from "@/components/contentful/ArticleContentLanding";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/contentful/container/Container";
 import { TextHighLight } from "@/components/contentful/TextHighLight";
+import { revalidateDuration } from "@/utils/constants";
 // Internationalization
 import { LocaleTypes } from "@/app/i18n/settings";
 import { createTranslation } from "@/app/i18n/server";
@@ -18,6 +19,8 @@ import { PageLandingFieldsFragment } from "@/lib/__generated/sdk";
 import { PageBlogPostFieldsFragment } from "@/lib/__generated/sdk";
 import { TagPageFieldsFragment } from "@/lib/__generated/sdk";
 import { TextHighlightFieldsFragment } from "@/lib/__generated/sdk";
+
+export const revalidate = revalidateDuration; // revalidate at most every hour
 
 interface PageParams {
   slug: string;
@@ -75,7 +78,7 @@ export async function generateMetadata(
     },
     openGraph: {
       type: "website",
-      siteName: "Example.dev - Free Tutorials and Resources for Developers",
+      siteName: "CloudApp.dev - Free Tutorials and Resources for Developers",
       locale: params.locale,
       url: url || "",
 
@@ -148,10 +151,10 @@ async function Sitemap_html({ params }: PageProps) {
       },
       publisher: {
         "@type": "Organization",
-        name: "Example.dev - Free Tutorials and Resources for Developers",
+        name: "CloudApp.dev - Free Tutorials and Resources for Developers",
         logo: {
           "@type": "ImageObject",
-          url: "https://www.example.dev/favicons/icon-192x192.png",
+          url: "https://www.cloudapp.dev/favicons/icon-192x192.png",
         },
       },
       image: seoItem?.url || undefined,
@@ -168,6 +171,9 @@ async function Sitemap_html({ params }: PageProps) {
     PagesSitemapHtml?.tagPageCollection?.items;
   const sitemapPageBlogPostUrls: PageBlogPostFieldsFragment | any =
     PagesSitemapHtml?.pageBlogPostCollection?.items;
+  const totalBlogpost = PagesSitemapHtml?.pageBlogPostCollection?.total;
+  const totalLandingPages = PagesSitemapHtml?.pageLandingCollection?.total;
+  const totalTagPages = PagesSitemapHtml?.tagPageCollection?.total;
 
   // Internationalization, get the translation function
   const { t } = await createTranslation(params.locale as LocaleTypes, "common");
@@ -189,7 +195,7 @@ async function Sitemap_html({ params }: PageProps) {
         <div className="mx-auto max-w-8xl  mt-5 text-base">
           <div className="text-2xl font-bold mb-2">
             {" "}
-            {t("sitemaphtml.landingpages")}
+            {t("sitemaphtml.landingpages")} - {totalLandingPages}
           </div>
           {sitemapPageLandingUrls.map((field: any, index: number) => {
             return field ? (
@@ -199,7 +205,7 @@ async function Sitemap_html({ params }: PageProps) {
             ) : null;
           })}
           <div className="text-2xl font-bold mb-2">
-            {t("sitemaphtml.tagpages")}
+            {t("sitemaphtml.tagpages")} - {totalTagPages}
           </div>
           {sitemapPageTagpageUrls.map((field: any, index: number) => {
             return field ? (
@@ -210,7 +216,7 @@ async function Sitemap_html({ params }: PageProps) {
           })}
           <div className="text-2xl font-bold mb-2">
             {" "}
-            {t("sitemaphtml.blogpostpages")}
+            {t("sitemaphtml.blogpostpages")} - {totalBlogpost}
           </div>
           {sitemapPageBlogPostUrls.map((field: any, index: number) => {
             return field ? (

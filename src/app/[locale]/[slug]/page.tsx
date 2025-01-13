@@ -17,7 +17,7 @@ import { TagCloudSimpleHome } from "@/components/search/tagcloudsimpleHome.compo
 // Claps
 import ClapButton from "@/components/contentful/ClapButton.component";
 // Buymeacoffee
-import Buymeacoffe from "@/components/sharing/buymeacoffee.component";
+// import Buymeacoffe from "@/components/sharing/buymeacoffee.component";
 // ViewCount
 // import { ReportView } from "@/components/analytics/viewcount";
 import redis from "../../../lib/redis";
@@ -117,7 +117,7 @@ export async function generateMetadata(
     },
     openGraph: {
       type: "website",
-      siteName: "Example.dev - Free Tutorials and Resources for Developers",
+      siteName: "CloudApp.dev - Free Tutorials and Resources for Developers",
       locale: params.locale,
       url: url || "",
 
@@ -176,10 +176,10 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
       },
       publisher: {
         "@type": "Organization",
-        name: "Example.dev - Free Tutorials and Resources for Developers",
+        name: "CloudApp.dev - Free Tutorials and Resources for Developers",
         logo: {
           "@type": "ImageObject",
-          url: "https://www.example.dev/favicons/icon-192x192.png",
+          url: "https://www.cloudapp.dev/favicons/icon-192x192.png",
         },
       },
       image: blogPost?.featuredImage?.url || undefined,
@@ -293,7 +293,7 @@ async function BlogPostPage({ params }: BlogPostPageProps) {
             locale={params.locale.toString()}
             postCount={relatedPosts.length}
           />
-          <Buymeacoffe />
+          {/* <Buymeacoffe /> */}
         </Container>
       )}
       <Container className="max-w-5xl mt-8">
