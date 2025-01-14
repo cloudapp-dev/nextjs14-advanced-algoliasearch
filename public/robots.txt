@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://www.techbook.cloud
+Host: https://www.cloudapp.dev
 
 # Sitemaps
-Sitemap: https://www.techbook.cloud/sitemap.xml
+Sitemap: https://www.cloudapp.dev/sitemap.xml

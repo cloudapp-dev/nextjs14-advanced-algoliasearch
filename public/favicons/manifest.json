@@ -1,0 +1,34 @@
+{
+  "name": "CloudApp.dev PWA",
+  "short_name": "Cloudapp.dev",
+  "display": "standalone",
+  "description": "A Demo for Next-PWA",
+  "theme_color": "#f69435",
+  "background_color": "#f69435",
+  "start_url": "/",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/favicons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicons/android-chrome-maskable-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicons/android-chrome-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
